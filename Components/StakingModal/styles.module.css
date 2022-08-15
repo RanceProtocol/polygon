@@ -1,0 +1,128 @@
+.root {
+    @apply absolute
+    w-[30rem]
+    max-w-[95%]
+    md:w-[450px]
+    md:max-w-none
+    left-1/2
+    -translate-x-1/2
+    top-1/2 -translate-y-1/2
+    bg-theme-primary-2
+    p-8
+    rounded-xl
+    md:rounded-2xl
+    max-h-[100vh]
+    overflow-x-auto
+}
+.header {
+    @apply flex
+    justify-between
+    items-center
+    capitalize
+    mb-8;
+}
+
+.title {
+    @apply text-2xl
+    font-extrabold;
+}
+
+.close__btn {
+    @apply w-8
+    h-8
+}
+
+.close__icon__wrapper {
+    @apply w-8
+    h-8
+    relative;
+}
+
+.tokens__logos__container {
+    @apply mx-auto
+    flex
+    justify-center
+}
+
+.token__logo {
+    @apply w-12
+    h-12
+    relative;
+}
+
+.token__logo:nth-child(2) {
+    @apply
+    right-3
+}
+
+.token__logo:nth-child(1) {
+    @apply
+    left-3
+}
+
+.pool__tokens {
+    @apply text-base
+    font-bold
+    mt-6
+    text-center;
+}
+
+.input__group {
+    @apply my-10
+}
+
+.label__and__balance {
+    @apply flex
+    justify-between
+    text-[.6rem]
+    sm:text-xs
+}
+
+.label {
+    @apply font-extrabold
+}
+
+.balance {
+    @apply text-theme-green
+}
+
+.amount__input {
+    @apply w-full
+    py-4
+    px-6
+    mt-2
+    rounded-full
+    bg-theme-white-alpha-2
+    border
+    border-theme-gray-4
+    text-sm;
+}
+
+.amount__input::placeholder {
+    @apply text-theme-gray-4;
+}
+
+.action__button {
+    @apply w-full
+    bg-theme-secondary-2
+    hover:bg-theme-secondary-1
+    text-theme-black
+    font-bold
+    text-base
+    rounded-full
+    p-3
+}
+
+.action__button:disabled {
+    @apply bg-theme-secondary-alpha-2
+    text-theme-white-alpha
+    cursor-not-allowed
+}
+
+.message {
+    @apply block
+    text-sm
+    py-2
+    text-center
+    text-theme-gray-6
+}

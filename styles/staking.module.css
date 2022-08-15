@@ -1,0 +1,101 @@
+.main {
+    @apply mt-24
+    sm:mt-16
+    w-full
+    md:w-[90%]
+    md:mx-auto;
+   }
+   
+   .banner {
+    @apply bg-theme-secondary-alpha
+    rounded-lg
+    flex
+    justify-between
+    relative
+    overflow-hidden
+   }
+   
+   .banner__container {
+       @apply pl-4 py-4
+       pr-4
+       sm:pr-0
+       max-w-[75%]
+       rounded-tr-xl
+   }
+
+   .banner__header {
+    @apply text-base
+    sm:text-xl
+    font-bold
+    py-2;
+   }
+
+   .banner__text {
+    @apply text-xs
+    sm:text-base
+    text-theme-gray-2
+   }
+
+   .banner__image__container {
+    @apply w-32
+    h-28
+    absolute
+    -right-10
+    sm:right-0
+    top-0
+    rounded-tr-xl
+   }
+
+   .banner__image {
+    @apply rounded-tr-xl
+   }
+
+
+   .staking__card__wrapper {
+    @apply
+    mt-12
+    flex
+    flex-wrap
+    sm:gap-6
+    xl:gap-8
+    justify-center
+    
+}
+
+.earning__section {
+    @apply bg-earning-bg-mobile md:bg-earning-bg-desktop
+    bg-no-repeat bg-cover w-full
+    rounded-3xl my-8
+    p-4
+    sm:p-6
+    md:p-8
+    block
+    lg:flex
+    lg:gap-6
+}
+
+.earning__heading {
+    @apply text-2xl font-bold mb-4
+}
+
+.earning__text {
+    @apply text-base
+    text-theme-gray-2
+}
+
+.cards__section {
+    @apply flex gap-4
+    overflow-x-auto
+    mx-auto
+    mt-4
+    lg:mt-0
+}
+
+.message {
+    @apply text-center
+    sm:col-span-2
+    xl:col-span-3
+    mt-4
+    text-theme-white-alpha
+    text-sm
+}

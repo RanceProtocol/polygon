@@ -1,0 +1,70 @@
+.root {
+    @apply my-10
+    grid grid-cols-1
+    sm:grid-cols-2
+    sm:gap-6
+    lg:grid-cols-3
+    lg:gap-8;
+}
+
+/* package card here */
+.insurance__package__card {
+    @apply bg-theme-primary-2
+    rounded-[1.5rem]
+    pt-8 px-4 pb-[18px]
+    mb-6 sm:mb-0 w-full max-w-[32rem]
+    sm:w-auto mx-auto sm:mx-0;
+}
+
+.name {
+    @apply text-2xl
+    font-extrabold mb-6;
+}
+
+.insurable__coins__wrapper {
+    @apply flex
+    justify-between
+    items-center mb-6;
+}
+
+.insurable__coins__key {
+    @apply text-base;
+}
+
+.package__details {
+    @apply bg-theme-gray-alpha
+    flex
+    justify-between
+    items-center
+    p-4
+    sm:p-6
+    mb-8;
+}
+
+.value {
+    @apply block
+    text-xl
+    font-bold;
+}
+
+.value__unit {
+    @apply text-[.5rem];
+}
+
+.key {
+    @apply block
+    text-sm
+    text-theme-white-alpha
+    text-center;
+}
+
+.button {
+    @apply w-full
+    bg-theme-secondary-2
+    hover:bg-theme-secondary-1
+    text-theme-black
+    font-bold
+    text-lg
+    rounded-full
+    p-3;
+}

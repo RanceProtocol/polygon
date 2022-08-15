@@ -1,0 +1,162 @@
+.root {
+    @apply bg-theme-primary-2
+    rounded-[1.5rem]
+    p-8
+    pb-6
+    mb-6
+    sm:mb-0
+    w-full
+    max-w-[24rem]
+}
+
+.tokens__logos__container {
+    @apply mx-auto
+    flex
+    justify-center
+}
+
+.token__logo {
+    @apply w-12
+    h-12
+    relative;
+}
+
+.token__logo:nth-child(2) {
+    @apply
+    right-3
+}
+
+.token__logo:nth-child(1) {
+    @apply
+    left-3
+}
+
+.pool__tokens {
+    @apply text-xl
+    font-bold
+    mt-6
+    text-center;
+}
+
+.pool__description {
+    @apply
+    text-sm
+    mt-1
+    text-center
+    text-theme-gray-3
+}
+
+
+.apr {
+    @apply flex
+    justify-center
+    items-center
+    gap-2
+    my-8
+}
+
+.apr__text {
+    @apply text-3xl
+    font-extrabold
+}
+
+.info__icon {
+    @apply text-base
+    text-theme-secondary-1
+    cursor-pointer
+    opacity-60;
+}
+
+.pool__details, .user__details {
+    @apply flex
+    justify-between
+    items-center
+    mb-4
+}
+.key__values {
+    @apply flex
+    flex-col
+}
+
+.key__values:last-of-type {
+    @apply items-end
+}
+
+
+.key {
+    @apply text-xs
+    text-theme-gray-1
+}
+
+.pool__details .value {
+    @apply text-theme-gray-2
+}
+
+.value {
+    @apply text-sm
+}
+
+.dollar__value {
+    @apply text-theme-gray-4
+}
+
+.btn {
+    @apply w-full
+    font-bold text-base
+    rounded-full p-3
+}
+
+.btn__small {
+    @apply w-full
+    text-xs
+    sm:text-sm
+    rounded-full p-2
+}
+
+.btn__group {
+    @apply flex
+    gap-4
+    justify-between
+    items-center
+}
+
+.btn__solid {
+    @apply
+    border-theme-secondary-1
+    bg-theme-secondary-2
+    hover:bg-theme-secondary-1
+    text-theme-white
+}
+
+.btn__solid2 {
+    @apply
+    border
+    border-theme-secondary-1
+    bg-theme-secondary-alpha-2
+    hover:bg-theme-secondary-1
+    hover:text-theme-black
+    text-theme-secondary-1
+}
+
+.btn__hollow {
+    @apply border border-theme-secondary-1
+    text-theme-secondary-1
+}
+
+.contract__link {
+    @apply text-center
+    block
+    mt-6
+    text-sm
+    text-theme-gray-1
+    transition
+}
+
+.contract__link:hover {
+    @apply text-theme-white
+}
+
+.tooltip {
+    @apply w-[12rem]
+    text-xs;
+}
