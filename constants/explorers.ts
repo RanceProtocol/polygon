@@ -1,4 +1,4 @@
 export const explorers = {
-    56: "https://bscscan.com/",
-    97: "https://testnet.bscscan.com/",
+    137: "https://polygonscan.com/",
+    80001: "https://mumbai.polygonscan.com/",
 };

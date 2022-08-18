@@ -30,7 +30,7 @@ export const ConnectedModal: FC<IProps> = ({
     const { account } = useWeb3React();
     const BUSD = useToken(
         tokens[process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT as keyof typeof tokens]
-            .BUSD
+            .USDC
     );
     const RANCE = useToken(
         tokens[process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT as keyof typeof tokens]

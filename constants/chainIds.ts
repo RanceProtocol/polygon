@@ -1,14 +1,14 @@
 export const supportedChainIds = {
-    Mainnet: 56,
-    Testnet: 97,
+    Mainnet: 137,
+    Testnet: 80001,
 };
 export const getSupportedChainsName = (chainId: number): string => {
     switch (chainId) {
-        case 56:
-            return "Binance Smart Chain Mainnet";
-        case 97:
-            return "Binance Smart Chain Testnet";
+        case 137:
+            return "Polygon Mainnet";
+        case 80001:
+            return "Polygon Mumbai Testnet";
         default:
-            return "Binance Smart Chain Mainnet";
+            return "Polygon Mainnet";
     }
 };

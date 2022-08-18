@@ -108,7 +108,7 @@ export const getstakingContract2Pool = async (
     const totalStaked = await stakeToken.balanceOf(contract.address);
     const rewardToken = Erc20__factory.connect(
         tokens[process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT as keyof typeof tokens]
-            .BUSD,
+            .USDC,
         contract.provider
     );
     const rewardTokenDecimals = await rewardToken.decimals();
@@ -140,7 +140,7 @@ export const getstakingContract2Pool = async (
         rewardTokenAddress:
             tokens[
                 process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT as keyof typeof tokens
-            ].BUSD,
+            ].USDC,
         rewardTokenSymbol: "MUSD",
         apr,
         totalStaked,

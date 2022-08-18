@@ -20,9 +20,11 @@ const InsurableCoinsList: FC<IProp> = ({ coinSymbols }) => {
                     </div>
                 ))}
             </div>
-            <p className={styles.remaining__test}>{`+${
-                coinSymbols.length - 4
-            }`}</p>
+            {coinSymbols.length > 4 && (
+                <p className={styles.remaining__test}>{`+${
+                    coinSymbols.length - 4
+                }`}</p>
+            )}
         </div>
     );
 };

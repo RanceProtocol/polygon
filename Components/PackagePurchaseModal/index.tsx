@@ -337,6 +337,7 @@ const PackagePurchaseModal: FC<IProps> = ({
                 fromTokenContractAddress: paymentToken.value,
                 toTokenContractAddress: insurableCoins[coin as string],
                 amount: formDetails.amount,
+                provider: library,
             });
         } catch (error) {
             const toastBody = CustomToast({
@@ -414,12 +415,12 @@ const PackagePurchaseModal: FC<IProps> = ({
                     <span className={styles.notice__key}>Notice:</span>
                     <p className={styles.notice__paragraph}>
                         To insure a particular coin, you must provide its
-                        equivalent in BUSD or USDT.
+                        equivalent in USDC.
                     </p>
                 </div>
                 <div className={styles.payment__token__icon}>
                     <Image
-                        src={`/token-icons/BUSD.png`}
+                        src={`/token-icons/USDC.png`}
                         alt="payment token icon"
                         layout="fill"
                     />

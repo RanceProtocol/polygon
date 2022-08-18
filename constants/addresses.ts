@@ -1,5 +1,5 @@
 export const ranceProtocol = {
-    staging: "0xaca2d837a52e141e9a6cEbE33f685cc90F311356",
+    staging: "0x29062E2B9771FB81Cd088245B4137F538B65099b",
     mainnet: "",
 };
 
@@ -17,13 +17,11 @@ export const stakingContractAddresses = {
 export const tokens = {
     mainnet: {
         RANCE: "",
-        BUSD: "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
-        USDT: "0x55d398326f99059fF775485246999027B3197955",
+        USDC: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
     },
     staging: {
-        RANCE: "0x42081fece4bc26a65cccb3b352379e1f3663b435",
-        BUSD: "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
-        USDT: "0x55d398326f99059fF775485246999027B3197955",
+        RANCE: "0xa92CF4945dC605e29a72A965Ef55f2D342c70f8A", // CHANGE
+        USDC: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
     },
 };
 

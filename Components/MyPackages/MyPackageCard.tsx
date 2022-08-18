@@ -17,7 +17,7 @@ import { utils } from "ethers";
 import { useCountdown } from "../../hooks/useCountdown";
 import { padZero } from "../../utils/helpers";
 import { IInsurancePackage } from "../../modules/insurance/domain/entities";
-import { insuranceState } from "../../modules/insurance/ui/redux/state";
+import useLazyToken from "../../hooks/useLazyToken";
 
 interface IProp extends IInsurancePackage {
     clickAction: (id: string) => void;
@@ -30,6 +30,7 @@ const MyPackageCard: FC<IProp> = (props) => {
         endTimestamp,
         initialDeposit,
         insureCoin,
+        paymentToken,
         packageId,
         packagePlanName,
         startTimestamp,
@@ -38,9 +39,18 @@ const MyPackageCard: FC<IProp> = (props) => {
     const [chartData, setChartData] = useState<number[]>([]);
     const [priceChange, setPriceChange] = useState<string>("0%");
     const [currentTimeStamp, setCurrentTimeStamp] = useState(0);
+    const [paymentTokenDecimals, setPaymetTokenDecimals] = useState<
+        number | null
+    >(null);
 
-    const state = insuranceState();
-    const { insurableCoins } = state;
+    const { getDecimal } = useLazyToken();
+    useEffect(() => {
+        (async () => {
+            const decimal = await getDecimal(paymentToken);
+            setPaymetTokenDecimals(decimal);
+        })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         (async () => {
@@ -73,9 +83,14 @@ const MyPackageCard: FC<IProp> = (props) => {
             <div className={styles.head}>
                 <span className={styles.balance}>
                     Current balance:{" "}
-                    <span className={styles.amount}>{`$${Number(
-                        utils.formatEther(initialDeposit)
-                    )}`}</span>
+                    {paymentTokenDecimals && (
+                        <span className={styles.amount}>{`$${Number(
+                            utils.formatUnits(
+                                initialDeposit,
+                                paymentTokenDecimals
+                            )
+                        )}`}</span>
+                    )}
                 </span>
                 {currentTimeStamp > (endTimestamp as number) && (
                     <span
@@ -108,9 +123,14 @@ const MyPackageCard: FC<IProp> = (props) => {
                         <span className={styles.key}>Package started</span>
                     </div>
                     <div className={styles.key__value}>
-                        <span className={styles.value}>{`$${Number(
-                            utils.formatEther(initialDeposit)
-                        )}`}</span>
+                        {paymentTokenDecimals && (
+                            <span className={styles.value}>{`$${Number(
+                                utils.formatUnits(
+                                    initialDeposit,
+                                    paymentTokenDecimals
+                                )
+                            )}`}</span>
+                        )}
                         <span className={styles.key}>Initial amount</span>
                     </div>
                     <div className={styles.key__value}>

@@ -82,7 +82,7 @@ export const getRANCEPrice = async (
         tokens[process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT as keyof typeof tokens]
             .RANCE,
         tokens[process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT as keyof typeof tokens]
-            .BUSD,
+            .USDC,
     ];
     try {
         const price = await getPriceWithAutosharkRouter(path, provider);

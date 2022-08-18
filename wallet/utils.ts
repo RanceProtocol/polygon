@@ -33,8 +33,8 @@ export const addNetwork = async (
                             rpcUrls: [RPC_URLS[chainId]],
                             blockExplorerUrls: [explorers[chainId]],
                             nativeCurrency: {
-                                name: "Binance Coin",
-                                symbol: "BNB", // 2-6 characters long
+                                name: "MATIC",
+                                symbol: "MATIC", // 2-6 characters long
                                 decimals: 18,
                             },
                         },
@@ -64,8 +64,8 @@ export const getDefaultProvider = () => {
     return new ethers.providers.JsonRpcProvider(
         process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT === "mainnet" ||
         process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT === "staging"
-            ? RPC_URLS[56]
-            : RPC_URLS[97]
+            ? RPC_URLS[137]
+            : RPC_URLS[80001]
     );
 };
 
