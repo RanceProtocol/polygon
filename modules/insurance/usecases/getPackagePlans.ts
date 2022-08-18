@@ -29,12 +29,17 @@ export const getPackagePlans = async (
             insureCoinLength
         );
 
-        const insurableCoinsEntries: string[][] = await Promise.all(
+        let insurableCoinsEntries: string[][] = await Promise.all(
             insurableCoinsNames.map(async (name) => [
                 name,
                 await contract.insureCoinNameToAddress(name),
             ])
         );
+        // we want matic at the third position
+        const coinAtPosition2 = insurableCoinsEntries[2];
+        insurableCoinsEntries[2] = insurableCoinsEntries[3];
+        insurableCoinsEntries[3] = coinAtPosition2;
+
         const insurableCoinsObject = Object.fromEntries(insurableCoinsEntries);
 
         const paymentTokenLength = await contract.getPaymentTokensLength();
