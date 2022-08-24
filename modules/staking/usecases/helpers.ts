@@ -38,6 +38,7 @@ export const getstakingContract1Pool = async (
     const rancePerBlock = (await contract.RANCEPerBlock()).mul(
         await contract.BONUS_MULTIPLIER()
     );
+
     const totalRANCEPerYr = rancePerBlock.mul(17280).mul(365);
     const poolRANCEPerYr = (poolInfo.allocPoint as BigNumber).mul(
         totalRANCEPerYr
@@ -97,15 +98,18 @@ export const getstakingContract2Pool = async (
     const contractAddress = contract.address;
     const totalAllocPoint = Number(await contract.totalAllocPoint());
     const rancePrice = await getRANCEPrice(contract.provider);
+
     const poolInfo = structOutputToObject(
         await contract.poolInfo(stakingAddressToPool[contract.address])
     );
+
     const stakeToken = Erc20__factory.connect(
         poolInfo.lpToken,
         contract.provider
     );
     const stakeTokenDecimals = await stakeToken.decimals();
     const totalStaked = await stakeToken.balanceOf(contract.address);
+
     const rewardToken = Erc20__factory.connect(
         tokens[process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT as keyof typeof tokens]
             .USDC,
@@ -115,6 +119,7 @@ export const getstakingContract2Pool = async (
     const musdPerBlock = (await contract.USDCPerBlock()).mul(
         await contract.BONUS_MULTIPLIER()
     );
+
     const totalMUSDPerYr = musdPerBlock.mul(17280).mul(365);
     const poolMUSDPerYr = (poolInfo.allocPoint as BigNumber).mul(
         totalMUSDPerYr
