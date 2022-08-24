@@ -5,12 +5,12 @@ export const ranceProtocol = {
 
 export const stakingContractAddresses = {
     staging: [
-        "0xB1ad1e8612C228e4A6C9cDed64d8A270157c9455",
-        "0x1D17EE3b2eD935305b77D72Ab883D3827bC2E605",
+        "0xd28bb38195b1a8a7f29161d897b46a3e8e284692",
+        "0xcfe3ab15563442b41248076c11bf5abb63c46e41",
     ],
     mainnet: [
-        "0xB1ad1e8612C228e4A6C9cDed64d8A270157c9455",
-        "0x1D17EE3b2eD935305b77D72Ab883D3827bC2E605",
+        "0xd28bb38195b1a8a7f29161d897b46a3e8e284692",
+        "0xcfe3ab15563442b41248076c11bf5abb63c46e41",
     ],
 };
 
@@ -20,14 +20,14 @@ export const tokens = {
         USDC: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
     },
     staging: {
-        RANCE: "0xa92CF4945dC605e29a72A965Ef55f2D342c70f8A", // CHANGE
+        RANCE: "0xa92CF4945dC605e29a72A965Ef55f2D342c70f8A",
         USDC: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
     },
 };
 
 export const stakingAddressToPool: { [key: string]: number } = {
-    "0xB1ad1e8612C228e4A6C9cDed64d8A270157c9455": 0, //staging
-    "0x1D17EE3b2eD935305b77D72Ab883D3827bC2E605": 1, //staging
+    "0xd28bb38195b1a8a7f29161d897b46a3e8e284692": 0, //staging
+    "0xcfe3ab15563442b41248076c11bf5abb63c46e41": 1, //staging
 };
 
 export const masterRanceWallet = {
@@ -35,4 +35,4 @@ export const masterRanceWallet = {
     mainnet: "0x91A8BEF2bEBD46fBD079667DcE72865C1f015df0", // replaced with mainnet wallet later
 };
 
-export const AUTOSHARK_ADDRESSES = "0xB0EeB0632bAB15F120735e5838908378936bd484";
+export const POLYGONMM_ROUTER = "0x51aba405de2b25e5506dea32a6697f450ceb1a17";

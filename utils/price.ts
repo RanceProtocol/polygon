@@ -1,7 +1,7 @@
 import axios from "axios";
 import { BigNumber, ethers, utils } from "ethers";
-import { AUTOSHARK_ADDRESSES, tokens } from "../constants/addresses";
-import { AutoSharkRouter__factory, Erc20, Erc20__factory } from "../typechain";
+import { POLYGONMM_ROUTER, tokens } from "../constants/addresses";
+import { PolygonmmRouter__factory, Erc20, Erc20__factory } from "../typechain";
 import { getCurrentTimestamp, getDateFromTimstamp } from "./time";
 
 export const getPriceChangeSinceInsured = async (
@@ -57,14 +57,14 @@ export const getCoinChartData = async (
     return parsedData;
 };
 
-const AutosharkRouter = (provider: ethers.providers.Provider | ethers.Signer) =>
-    AutoSharkRouter__factory.connect(AUTOSHARK_ADDRESSES, provider);
+const PolygonmmRouter = (provider: ethers.providers.Provider | ethers.Signer) =>
+    PolygonmmRouter__factory.connect(POLYGONMM_ROUTER, provider);
 
-const getPriceWithAutosharkRouter = async (
+const getPriceWithPolygonmmRouter = async (
     path: string[],
     provider: ethers.providers.Provider | ethers.Signer
 ): Promise<number> => {
-    const router = AutosharkRouter(provider);
+    const router = PolygonmmRouter(provider);
     const amounts = await router.getAmountsOut(utils.parseEther("1"), path);
     const token: Erc20 = Erc20__factory.connect(
         path[path.length - 1],
@@ -85,7 +85,7 @@ export const getRANCEPrice = async (
             .USDC,
     ];
     try {
-        const price = await getPriceWithAutosharkRouter(path, provider);
+        const price = await getPriceWithPolygonmmRouter(path, provider);
         return price;
     } catch (error) {
         console.error(error);

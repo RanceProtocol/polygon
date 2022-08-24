@@ -112,7 +112,7 @@ export const getstakingContract2Pool = async (
         contract.provider
     );
     const rewardTokenDecimals = await rewardToken.decimals();
-    const musdPerBlock = (await contract.MUSDPerBlock()).mul(
+    const musdPerBlock = (await contract.USDCPerBlock()).mul(
         await contract.BONUS_MULTIPLIER()
     );
     const totalMUSDPerYr = musdPerBlock.mul(17280).mul(365);
@@ -141,7 +141,7 @@ export const getstakingContract2Pool = async (
             tokens[
                 process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT as keyof typeof tokens
             ].USDC,
-        rewardTokenSymbol: "MUSD",
+        rewardTokenSymbol: "USDC",
         apr,
         totalStaked,
         potentialEarnings,
@@ -158,7 +158,7 @@ export const getstakingContract2Pool = async (
                 userAddress
             )
         ).amount;
-        pool.userEarned = await contract.pendingMUSD(
+        pool.userEarned = await contract.pendingUSDC(
             stakingAddressToPool[contract.address],
             userAddress
         );
