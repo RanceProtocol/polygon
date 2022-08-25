@@ -13,7 +13,9 @@ interface Params {
     provider: any;
 }
 
-export const findBestRoute = async (params: Params): Promise<string[]> => {
+export const findBestRoute = async (
+    params: Params
+): Promise<{ path: string[]; expectedOutput: string }> => {
     const {
         fromTokenContractAddress,
         toTokenContractAddress,
@@ -67,7 +69,13 @@ export const findBestRoute = async (params: Params): Promise<string[]> => {
             amount,
             TradeDirection.input
         );
-        return result.bestRouteQuote.routePathArray;
+
+        return {
+            path: result.bestRouteQuote.routePathArray,
+            expectedOutput:
+                result.bestRouteQuote
+                    .expectedConvertQuoteOrTokenAmountInMaxWithSlippage,
+        };
     } catch (error) {
         throw error;
     }
