@@ -225,7 +225,10 @@ const StakingModal: FC<IProps> = ({
         >
             <div className={styles.header}>
                 <h1 className={styles.title}>{action}</h1>
-                <button className={styles.close__btn} onClick={handleCloseModal}>
+                <button
+                    className={styles.close__btn}
+                    onClick={handleCloseModal}
+                >
                     <div className={styles.close__icon__wrapper}>
                         <Image
                             src={`/icons/close.svg`}
@@ -275,7 +278,11 @@ const StakingModal: FC<IProps> = ({
                 </div>
                 <input
                     type="text"
-                    placeholder="Enter an amount to stake"
+                    placeholder={
+                        action === "staking"
+                            ? "enter an amount to stake"
+                            : "enter an amount to unstake"
+                    }
                     value={amount}
                     onChange={handleAmountChange}
                     className={styles.amount__input}
