@@ -636,7 +636,11 @@ const PackagePurchaseModal: FC<IProps> = ({
                         <button
                             type="button"
                             className={styles.Purchase__button}
-                            disabled={sendingTx || !tradeDetails.path}
+                            disabled={
+                                sendingTx ||
+                                tradeDetails.processing ||
+                                !tradeDetails.path
+                            }
                             onClick={handleInsure}
                         >
                             {sendingTx ? "Buying package..." : "Buy package"}
