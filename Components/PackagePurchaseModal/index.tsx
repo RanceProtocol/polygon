@@ -575,7 +575,7 @@ const PackagePurchaseModal: FC<IProps> = ({
                     </div>
                 </div>
 
-                {Number(total) >= 0 &&
+                {Number(total) > 0 &&
                     userSelectedPaymentTokenDetails.balance &&
                     userSelectedPaymentTokenDetails.decimal &&
                     userSelectedPaymentTokenDetails.balance?.lt(
@@ -589,7 +589,7 @@ const PackagePurchaseModal: FC<IProps> = ({
                         </span>
                     )}
 
-                {Number(total) >= 0 &&
+                {Number(total) > 0 &&
                     userSelectedPaymentTokenDetails.balance &&
                     userSelectedPaymentTokenDetails.decimal &&
                     userSelectedPaymentTokenDetails.allowance &&
@@ -617,7 +617,7 @@ const PackagePurchaseModal: FC<IProps> = ({
                         </button>
                     )}
 
-                {Number(total) >= 0 &&
+                {Number(total) > 0 &&
                     userSelectedPaymentTokenDetails.balance &&
                     userSelectedPaymentTokenDetails.decimal &&
                     userSelectedPaymentTokenDetails.allowance &&
