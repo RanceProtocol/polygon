@@ -643,7 +643,7 @@ const PackagePurchaseModal: FC<IProps> = ({
                         </button>
                     )}
 
-                {Number(total) >= 0 && (
+                {total === "0" && (
                     <span className={styles.message}>Input amount</span>
                 )}
             </form>
