@@ -114,8 +114,16 @@ const StakingModal: FC<IProps> = ({
         stake(contractAddress, poolId, utils.parseEther(amount), callbacks);
     };
 
+    const handleMaxClick = () => {
+        if (action === "staking") {
+            setAmount(utils.formatEther(ranceBalance));
+        } else if (action === "unstaking") {
+            setAmount(utils.formatEther(userStake as BigNumber));
+        }
+    };
+
     const unstakeHandler = () => {
-        if (!BigNumber.from(amount).gt(0)) {
+        if (Number(amount) <= 0) {
             const toastBody = CustomToast({
                 message: "You cannot unstake 0 RANCE",
                 status: STATUS.ERROR,
@@ -270,24 +278,32 @@ const StakingModal: FC<IProps> = ({
                         {action === "staking"
                             ? `Available: ${Number(
                                   utils.formatEther(ranceBalance)
-                              )} RANCE`
+                              ).toFixed(2)} RANCE`
                             : `staked: ${Number(
                                   utils.formatEther(userStake as BigNumber)
-                              )} RANCE`}
+                              ).toFixed(2)} RANCE`}
                     </span>
                 </div>
-                <input
-                    type="text"
-                    placeholder={
-                        action === "staking"
-                            ? "enter an amount to stake"
-                            : "enter an amount to unstake"
-                    }
-                    value={amount}
-                    onChange={handleAmountChange}
-                    className={styles.amount__input}
-                    autoFocus
-                />
+                <div className={styles.input__container}>
+                    <input
+                        type="text"
+                        placeholder={
+                            action === "staking"
+                                ? "enter an amount to stake"
+                                : "enter an amount to unstake"
+                        }
+                        value={amount}
+                        onChange={handleAmountChange}
+                        className={styles.amount__input}
+                        autoFocus
+                    />
+                    <button
+                        className={styles.max__btn}
+                        onClick={handleMaxClick}
+                    >
+                        MAX
+                    </button>
+                </div>
             </div>
             {action === "staking" ? (
                 amount === "" ? (

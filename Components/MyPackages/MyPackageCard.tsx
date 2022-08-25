@@ -30,6 +30,7 @@ const MyPackageCard: FC<IProp> = (props) => {
         endTimestamp,
         initialDeposit,
         insureCoin,
+        insureOutput,
         paymentToken,
         packageId,
         packagePlanName,
@@ -42,12 +43,29 @@ const MyPackageCard: FC<IProp> = (props) => {
     const [paymentTokenDecimals, setPaymetTokenDecimals] = useState<
         number | null
     >(null);
+    const [insureCoinDecimals, setInsureCoinDecimals] = useState<number | null>(
+        null
+    );
 
     const { getDecimal } = useLazyToken();
     useEffect(() => {
         (async () => {
-            const decimal = await getDecimal(paymentToken);
-            setPaymetTokenDecimals(decimal);
+            try {
+                const decimals = await Promise.all([
+                    await getDecimal(paymentToken),
+                    await getDecimal(insureCoin),
+                ]);
+                setPaymetTokenDecimals(decimals[0]);
+                setInsureCoinDecimals(decimals[1]);
+            } catch (error) {
+                // const toastBody = CustomToast({
+                //     message:
+                //         "An error occured, Please reload the page",
+                //     status: STATUS.ERROR,
+                //     type: TYPE.ERROR,
+                // });
+                // toast(toastBody);
+            }
         })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -138,6 +156,21 @@ const MyPackageCard: FC<IProp> = (props) => {
                             className={styles.value}
                         >{`${duration} ${timeUnitFull}`}</span>
                         <span className={styles.key}>Duration</span>
+                    </div>
+                    <div className={styles.key__value}>
+                        <span className={styles.value}>
+                            {insureCoinDecimals
+                                ? `${Number(
+                                      utils.formatUnits(
+                                          insureOutput,
+                                          insureCoinDecimals
+                                      )
+                                  ).toFixed(2)} ${addressToCoinDetails[
+                                      insureCoin
+                                  ].symbol.toUpperCase()}`
+                                : "..."}
+                        </span>
+                        <span className={styles.key}>To return</span>
                     </div>
                 </div>
                 <div className={styles.section__two}>

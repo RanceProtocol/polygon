@@ -74,7 +74,7 @@
 .body {
     @apply relative
     left-2
-    sm:left-4;
+    sm:left-2;
 }
 
 .name {
@@ -91,7 +91,7 @@
     justify-start
     items-center
     gap-6
-    sm:gap-8
+    /* sm:gap-8 */
     mt-6
     border-b-[0.2px]
     border-theme-gray-1
@@ -101,7 +101,7 @@
 .key__value {
     @apply flex
     flex-col
-    text-xs;
+    text-[.6rem];
 }
 
 .key {
