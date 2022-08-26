@@ -2,11 +2,8 @@ import Image from "next/image";
 import { FC, useEffect, useState } from "react";
 import { IoMdArrowDropup, IoMdArrowDropdown } from "react-icons/io";
 import styles from "./styles.module.css";
-import { Sparklines, SparklinesLine } from "react-sparklines";
-import {
-    getCoinChartData,
-    getPriceChangeSinceInsured,
-} from "../../utils/price";
+import { Sparklines, SparklinesLine, SparklinesSpots } from "react-sparklines";
+import { getCoinPriceDataSinceInsured } from "../../utils/price";
 import clsx from "clsx";
 import { addressToCoinDetails } from "../../constants/data";
 import {
@@ -80,16 +77,13 @@ const MyPackageCard: FC<IProp> = (props) => {
 
     useEffect(() => {
         (async () => {
-            const chartData = await getCoinChartData(
+            const coinPriceData = await getCoinPriceDataSinceInsured(
                 addressToCoinDetails[insureCoin].id,
                 startTimestamp
             );
-            setChartData(chartData);
-            const priceChange = await getPriceChangeSinceInsured(
-                addressToCoinDetails[insureCoin].id,
-                startTimestamp
-            );
-            setPriceChange(priceChange);
+
+            setChartData(coinPriceData.sparklineData);
+            setPriceChange(coinPriceData.priceChange);
         })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
