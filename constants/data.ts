@@ -66,9 +66,9 @@ export const addressToCoinDetails: {
         name: "WETH",
     },
     "0x22a31bD4cB694433B6de19e0aCC2899E553e9481": {
-        id: "mmfinance",
+        id: "mmfinance-polygon",
         symbol: "mmf",
-        name: "MMFinance",
+        name: "MMFinance (Polygon)",
     },
     "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270": {
         id: "wmatic",
