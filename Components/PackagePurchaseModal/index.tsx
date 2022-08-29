@@ -132,7 +132,7 @@ const PackagePurchaseModal: FC<IProps> = ({
             }
         })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [formDetails.coin, formDetails.amount]);
+    }, [formDetails.coin, formDetails.amount, formDetails.paymentToken]);
 
     useEffect(() => {
         if (!insurableCoins || formDetails.coin) return;
