@@ -556,7 +556,7 @@ const PackagePurchaseModal: FC<IProps> = ({
                         </div>
                     )}
                     <div className={styles.key__value}>
-                        <span className={styles.key}>Lock up period</span>
+                        <span className={styles.key}>Insurance period</span>
                         <span
                             className={styles.value}
                         >{`${targetPackageData?.duration} ${targetPackageData?.timeUnitFull}`}</span>

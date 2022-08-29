@@ -2,7 +2,7 @@ import Image from "next/image";
 import { FC, useEffect, useState } from "react";
 import { IoMdArrowDropup, IoMdArrowDropdown } from "react-icons/io";
 import styles from "./styles.module.css";
-import { Sparklines, SparklinesLine, SparklinesSpots } from "react-sparklines";
+import { Sparklines, SparklinesLine } from "react-sparklines";
 import { getCoinPriceDataSinceInsured } from "../../utils/price";
 import clsx from "clsx";
 import { addressToCoinDetails } from "../../constants/data";
