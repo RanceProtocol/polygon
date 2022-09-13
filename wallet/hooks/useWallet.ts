@@ -1,5 +1,5 @@
 import { AbstractConnector } from "@web3-react/abstract-connector";
-import { injected, walletConnect } from "../connnectors";
+import { injected, walletConnect, bitKeep } from "../connnectors";
 import { useWeb3React } from "@web3-react/core";
 import {
     getSupportedChainsName,
@@ -15,25 +15,54 @@ const useWallet = () => {
     const { activate, deactivate } = useWeb3React();
 
     useEffect(() => {
-        injected.isAuthorized().then(async (isAuthorized: boolean) => {
-            if (
-                isAuthorized &&
-                ["metamask", "trustwallet", "safepal"].includes(
-                    window.localStorage.getItem("wallet") as string
-                )
-            )
-                try {
-                    await activate(injected, undefined, true);
-                } catch (error) {
-                    const errorMessage = getConnectionError(error);
-                    const body = CustomToast({
-                        message: errorMessage,
-                        status: STATUS.ERROR,
-                        type: TYPE.ERROR,
-                    });
-                    toast(body);
-                }
-        });
+        setTimeout(() => {
+            injected.isAuthorized().then(async (isAuthorized: boolean) => {
+                if (
+                    isAuthorized &&
+                    ["metamask", "trustwallet", "safepal"].includes(
+                        window.localStorage.getItem("wallet") as string
+                    )
+                ) {
+                    try {
+                        await activate(injected, undefined, true);
+                    } catch (error) {
+                        const errorMessage = getConnectionError(error);
+                        const body = CustomToast({
+                            message: errorMessage,
+                            status: STATUS.ERROR,
+                            type: TYPE.ERROR,
+                        });
+                        toast(body);
+                    }
+                } else
+                    bitKeep
+                        .isAuthorized()
+                        .then(async (isAuthorized: boolean) => {
+                            if (
+                                isAuthorized &&
+                                ["bitkeep"].includes(
+                                    window.localStorage.getItem(
+                                        "wallet"
+                                    ) as string
+                                )
+                            ) {
+                                try {
+                                    await activate(bitKeep, undefined, true);
+                                } catch (error) {
+                                    const errorMessage =
+                                        getConnectionError(error);
+                                    const body = CustomToast({
+                                        message: errorMessage,
+                                        status: STATUS.ERROR,
+                                        type: TYPE.ERROR,
+                                    });
+                                    toast(body);
+                                }
+                            }
+                        });
+            });
+        }, 1000);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const connectWallet = useCallback(
@@ -46,6 +75,9 @@ const useWallet = () => {
                 case "injected":
                     connector = injected;
                     break;
+                case "bitkeep":
+                    connector = bitKeep;
+                    break;
                 case "walletconnect":
                     connector = walletConnect;
                     break;
@@ -57,12 +89,11 @@ const useWallet = () => {
                 await activate(connector);
                 const chainId = await connector.getChainId();
                 const provider = await connector.getProvider();
-
                 if (
                     !Object.values(supportedChainIds).includes(
                         Number(chainId)
                     ) &&
-                    name === "injected"
+                    (name === "injected" || name === "bitkeep")
                 ) {
                     try {
                         await addNetwork(provider);
