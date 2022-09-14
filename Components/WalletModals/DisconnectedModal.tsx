@@ -3,14 +3,7 @@ import ModalWrapper from "../ModalWrapper";
 import styles from "./styles.module.css";
 import { BsExclamationTriangle } from "react-icons/bs";
 import Image from "next/image";
-import {
-    Metamask,
-    SafePal,
-    TrustWallet,
-    WalletConnect,
-    BitKeep,
-    MoreIcon,
-} from "../svgIcons";
+import { MoreIcon } from "../svgIcons";
 import { toggleWalletModal } from "../../appState/shared/action";
 import { useDispatch } from "react-redux";
 import { walletConfig } from "./config";

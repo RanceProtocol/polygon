@@ -20,9 +20,11 @@ const useWallet = () => {
             injected.isAuthorized().then(async (isAuthorized: boolean) => {
                 if (
                     isAuthorized &&
-                    ["metamask", "trustwallet", "safepal"].includes(
-                        window.localStorage.getItem("wallet") as string
-                    )
+                    [
+                        walletStrings.metamask,
+                        walletStrings.trustwallet,
+                        walletStrings.safepal,
+                    ].includes(window.localStorage.getItem("wallet") as string)
                 ) {
                     try {
                         await activate(injected, undefined, true);
@@ -35,7 +37,7 @@ const useWallet = () => {
                         });
                         toast(body);
                     }
-                } else
+                } else {
                     bitKeep
                         .isAuthorized()
                         .then(async (isAuthorized: boolean) => {
@@ -61,6 +63,7 @@ const useWallet = () => {
                                 }
                             }
                         });
+                }
             });
         }, 1000);
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -153,15 +156,6 @@ const useWallet = () => {
     );
 
     const disconnectWallet = () => {
-        let connector: AbstractConnector;
-        const connectedWalletName = window.localStorage.getItem("wallet");
-        if (
-            ["metamask", "trustwallet", "safepal"].includes(
-                connectedWalletName as string
-            )
-        )
-            connector = injected;
-        else connector = walletConnect;
         deactivate();
         window.localStorage.removeItem("wallet");
     };
