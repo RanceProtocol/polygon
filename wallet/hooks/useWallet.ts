@@ -10,6 +10,7 @@ import { useCallback, useEffect } from "react";
 import CustomToast, { STATUS, TYPE } from "../../Components/CustomToast";
 import { toast } from "react-toastify";
 import { getChainId } from "../../utils/helpers";
+import { walletStrings } from "../constants";
 
 const useWallet = () => {
     const { activate, deactivate } = useWeb3React();
@@ -69,7 +70,11 @@ const useWallet = () => {
         async (name: string) => {
             let connector: AbstractConnector;
             const walletName = name;
-            const injectedWallets = ["metamask", "trustwallet", "safepal"];
+            const injectedWallets = [
+                walletStrings.metamask,
+                walletStrings.trustwallet,
+                walletStrings.safepal,
+            ];
             if (injectedWallets.includes(name)) name = "injected";
             switch (name) {
                 case "injected":

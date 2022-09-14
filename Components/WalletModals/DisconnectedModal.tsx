@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import ModalWrapper from "../ModalWrapper";
 import styles from "./styles.module.css";
 import { BsExclamationTriangle } from "react-icons/bs";
@@ -9,9 +9,11 @@ import {
     TrustWallet,
     WalletConnect,
     BitKeep,
+    MoreIcon,
 } from "../svgIcons";
 import { toggleWalletModal } from "../../appState/shared/action";
 import { useDispatch } from "react-redux";
+import { walletConfig } from "./config";
 
 interface IProps {
     open: boolean;
@@ -29,12 +31,20 @@ export const DisconnectedModal: FC<IProps> = ({
         await connectWallet(name);
         toggleWalletModal(dispatch);
     };
+    const [showMore, setShowMore] = useState(false);
+    let diplayedWallet = showMore ? walletConfig : walletConfig.slice(0, 3);
+
+    const onAfterClose = () => {
+        setShowMore(false);
+    };
+
     return (
         <ModalWrapper
             open={open}
             label="Connect Wallet Modal"
             onClose={onClose}
             contentClassName={styles.root}
+            onAfterClose={onAfterClose}
         >
             <h2 className={styles.heading}>Connect Wallet</h2>
             <p className={styles.sub__heading}>
@@ -43,41 +53,32 @@ export const DisconnectedModal: FC<IProps> = ({
             </p>
 
             <div className={styles.wallet__wrapper}>
-                <button
-                    className={styles.wallet__btn}
-                    onClick={() => connectWalletHandler("metamask")}
-                >
-                    <Metamask className={styles.wallet__icon} width="60" />
-                    <span className={styles.wallet__name}>Metamask</span>
-                </button>
-                <button
-                    className={styles.wallet__btn}
-                    onClick={() => connectWalletHandler("bitkeep")}
-                >
-                    <BitKeep className={styles.wallet__icon} width="60" />
-                    <span className={styles.wallet__name}>Bitkeep</span>
-                </button>
-                <button
-                    className={styles.wallet__btn}
-                    onClick={() => connectWalletHandler("trustwallet")}
-                >
-                    <TrustWallet className={styles.wallet__icon} width="60" />
-                    <span className={styles.wallet__name}>Trustwallet</span>
-                </button>
-                <button
-                    className={styles.wallet__btn}
-                    onClick={() => connectWalletHandler("safepal")}
-                >
-                    <SafePal className={styles.wallet__icon} width="60" />
-                    <span className={styles.wallet__name}>Safepal</span>
-                </button>
-                <button
-                    className={styles.wallet__btn}
-                    onClick={() => connectWalletHandler("walletconnect")}
-                >
-                    <WalletConnect className={styles.wallet__icon} width="60" />
-                    <span className={styles.wallet__name}>WalletConnect</span>
-                </button>
+                {diplayedWallet.map((wallet, index) => {
+                    const Icon = wallet.icon;
+                    return (
+                        <button
+                            key={index}
+                            className={styles.wallet__btn}
+                            onClick={() =>
+                                connectWalletHandler(wallet.walletName)
+                            }
+                        >
+                            <Icon className={styles.wallet__icon} width="40" />
+                            <span className={styles.wallet__name}>
+                                {wallet.title}
+                            </span>
+                        </button>
+                    );
+                })}
+                {!showMore && (
+                    <button
+                        className={styles.wallet__btn}
+                        onClick={() => setShowMore(true)}
+                    >
+                        <MoreIcon className={styles.wallet__icon} width="40" />
+                        <span className={styles.wallet__name}>More</span>
+                    </button>
+                )}
             </div>
 
             <div className={styles.notice}>
