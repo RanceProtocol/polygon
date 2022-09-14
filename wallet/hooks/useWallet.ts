@@ -1,5 +1,5 @@
 import { AbstractConnector } from "@web3-react/abstract-connector";
-import { injected, walletConnect, bitKeep } from "../connnectors";
+import { bitKeep, injected, walletConnect } from "../connnectors";
 import { useWeb3React } from "@web3-react/core";
 import {
     getSupportedChainsName,
@@ -43,7 +43,7 @@ const useWallet = () => {
                         .then(async (isAuthorized: boolean) => {
                             if (
                                 isAuthorized &&
-                                ["bitkeep"].includes(
+                                [walletStrings.bitkeep].includes(
                                     window.localStorage.getItem(
                                         "wallet"
                                     ) as string
@@ -83,10 +83,10 @@ const useWallet = () => {
                 case "injected":
                     connector = injected;
                     break;
-                case "bitkeep":
+                case walletStrings.bitkeep:
                     connector = bitKeep;
                     break;
-                case "walletconnect":
+                case walletStrings.walletconnect:
                     connector = walletConnect;
                     break;
                 default:
@@ -101,7 +101,7 @@ const useWallet = () => {
                     !Object.values(supportedChainIds).includes(
                         Number(chainId)
                     ) &&
-                    (name === "injected" || name === "bitkeep")
+                    (name === "injected" || name === walletStrings.bitkeep)
                 ) {
                     try {
                         await addNetwork(provider);
