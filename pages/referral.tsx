@@ -3,6 +3,10 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/referral.module.css";
 import { Fragment } from "react";
+import GenerateReferralLink from "../Components/GenerateReferralLink";
+import NoCommisionsYet from "../Components/NoCommissionsYet";
+import ReferralLink from "../Components/ReferralLink";
+import ReferralsSummary from "../Components/ReferralsSummary";
 
 const Referral: NextPage = () => {
     return (
@@ -30,6 +34,13 @@ const Referral: NextPage = () => {
                             />
                         </div>
                     </div>
+                    {/* <GenerateReferralLink /> */}
+                    <ReferralLink refCode={"rpFGR53H554YT"} />
+                    <ReferralsSummary
+                        referralCount={0}
+                        rewardBalances={["0 USDC", "0 USDT"]}
+                    />
+                    <NoCommisionsYet />
                 </main>
             </div>
         </Fragment>
