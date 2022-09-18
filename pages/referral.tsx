@@ -35,14 +35,15 @@ const Referral: NextPage = () => {
                             />
                         </div>
                     </div>
-                    {/* <GenerateReferralLink /> */}
-                    {/* <ReferralLink refCode={"rpFGR53H554YT"} />
+                    <ReferralLink refCode={"rpFGR53H554YT"} />
+                    <ReferralRecordTable />
+
                     <ReferralsSummary
                         referralCount={0}
                         rewardBalances={["0 USDC", "0 USDT"]}
                     />
-                    <NoCommisionsYet /> */}
-                    <ReferralRecordTable />
+                    {/* <GenerateReferralLink /> */}
+                    {/* <NoCommisionsYet /> */}
                 </main>
             </div>
         </Fragment>

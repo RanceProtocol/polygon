@@ -4,7 +4,9 @@
     w-full
     md:w-[90%]
     md:mx-auto
-    grid;
+    md:grid
+    md:gap-6
+    md:grid-cols-3;
 }
 
 .banner {
@@ -13,7 +15,8 @@
        flex
        justify-between
        relative
-       overflow-hidden;
+       overflow-hidden
+       md:col-span-2;
 }
 
 .banner__container {

@@ -1,5 +1,5 @@
 .root {
-    @apply w-full;
+    @apply w-full overflow-x-auto md:col-span-2;
 }
 .table {
     @apply w-full
@@ -21,7 +21,7 @@
     @apply bg-theme-secondary-alpha-5;
 }
 .table__data {
-    @apply px-4 py-6 text-sm;
+    @apply px-4 py-6 text-sm whitespace-nowrap;
 }
 
 .pagination {
