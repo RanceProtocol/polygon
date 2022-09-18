@@ -1,2 +1,47 @@
 .root {
+    @apply w-full;
+}
+.table {
+    @apply w-full
+    text-left;
+}
+
+.table__head__container {
+    @apply bg-theme-white-alpha-5;
+}
+
+.table__head {
+    @apply p-4;
+}
+
+.table__body__container {
+}
+
+.table__row:nth-child(even) {
+    @apply bg-theme-secondary-alpha-5;
+}
+.table__data {
+    @apply px-4 py-6 text-sm;
+}
+
+.pagination {
+    @apply flex
+    justify-between
+    mt-4;
+}
+
+.page__info {
+    @apply text-xs;
+}
+
+.control__btns {
+    @apply flex gap-4 text-lg;
+}
+
+.btns {
+    @apply cursor-pointer p-20 bg-theme-secondary-3;
+}
+
+.btns:hover {
+    @apply bg-theme-secondary-3;
 }

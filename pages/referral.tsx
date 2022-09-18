@@ -7,6 +7,7 @@ import GenerateReferralLink from "../Components/GenerateReferralLink";
 import NoCommisionsYet from "../Components/NoCommissionsYet";
 import ReferralLink from "../Components/ReferralLink";
 import ReferralsSummary from "../Components/ReferralsSummary";
+import ReferralRecordTable from "../Components/ReferralRecordTable";
 
 const Referral: NextPage = () => {
     return (
@@ -35,12 +36,13 @@ const Referral: NextPage = () => {
                         </div>
                     </div>
                     {/* <GenerateReferralLink /> */}
-                    <ReferralLink refCode={"rpFGR53H554YT"} />
+                    {/* <ReferralLink refCode={"rpFGR53H554YT"} />
                     <ReferralsSummary
                         referralCount={0}
                         rewardBalances={["0 USDC", "0 USDT"]}
                     />
-                    <NoCommisionsYet />
+                    <NoCommisionsYet /> */}
+                    <ReferralRecordTable />
                 </main>
             </div>
         </Fragment>
