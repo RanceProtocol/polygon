@@ -161,3 +161,159 @@ export const stakingPools: IStakingPool[] = [
         stakeTokenPrice: 100,
     },
 ];
+
+export enum IReferralStatus {
+    AVAILABLE = "Available",
+    WITHDRAWN = "Withdrawn",
+}
+
+export interface IReferralRecord {
+    date: string;
+    address: string;
+    rewardAmount: string;
+    rewardTokenSymbol: string;
+    status: IReferralStatus;
+}
+
+export const referralRecords: IReferralRecord[] = [
+    {
+        date: "23-04-2022",
+        address: "0xaa42274d4B6369fd9fEb349Bf4eFBC14A649e3Fd",
+        rewardAmount: "20",
+        rewardTokenSymbol: "USDT",
+        status: IReferralStatus.WITHDRAWN,
+    },
+    {
+        date: "23-04-2022",
+        address: "0xaa42274d4B6369fd9fEb349Bf4eFBC14A649e3Fd",
+        rewardAmount: "20",
+        rewardTokenSymbol: "USDT",
+        status: IReferralStatus.WITHDRAWN,
+    },
+    {
+        date: "23-04-2022",
+        address: "0xaa42274d4B6369fd9fEb349Bf4eFBC14A649e3Fd",
+        rewardAmount: "20",
+        rewardTokenSymbol: "USDT",
+        status: IReferralStatus.WITHDRAWN,
+    },
+    {
+        date: "23-04-2022",
+        address: "0xaa42274d4B6369fd9fEb349Bf4eFBC14A649e3Fd",
+        rewardAmount: "20",
+        rewardTokenSymbol: "USDT",
+        status: IReferralStatus.WITHDRAWN,
+    },
+    {
+        date: "23-04-2022",
+        address: "0xaa42274d4B6369fd9fEb349Bf4eFBC14A649e3Fd",
+        rewardAmount: "20",
+        rewardTokenSymbol: "USDT",
+        status: IReferralStatus.WITHDRAWN,
+    },
+    {
+        date: "23-04-2022",
+        address: "0xaa42274d4B6369fd9fEb349Bf4eFBC14A649e3Fd",
+        rewardAmount: "20",
+        rewardTokenSymbol: "USDT",
+        status: IReferralStatus.WITHDRAWN,
+    },
+    {
+        date: "23-04-2022",
+        address: "0xaa42274d4B6369fd9fEb349Bf4eFBC14A649e3Fd",
+        rewardAmount: "20",
+        rewardTokenSymbol: "USDT",
+        status: IReferralStatus.WITHDRAWN,
+    },
+    {
+        date: "23-04-2022",
+        address: "0xaa42274d4B6369fd9fEb349Bf4eFBC14A649e3Fd",
+        rewardAmount: "20",
+        rewardTokenSymbol: "USDT",
+        status: IReferralStatus.WITHDRAWN,
+    },
+    {
+        date: "23-04-2022",
+        address: "0xaa42274d4B6369fd9fEb349Bf4eFBC14A649e3Fd",
+        rewardAmount: "20",
+        rewardTokenSymbol: "USDT",
+        status: IReferralStatus.WITHDRAWN,
+    },
+    {
+        date: "23-04-2022",
+        address: "0xaa42274d4B6369fd9fEb349Bf4eFBC14A649e3Fd",
+        rewardAmount: "20",
+        rewardTokenSymbol: "USDT",
+        status: IReferralStatus.WITHDRAWN,
+    },
+    {
+        date: "23-04-2022",
+        address: "0xaa42274d4B6369fd9fEb349Bf4eFBC14A649e3Fd",
+        rewardAmount: "20",
+        rewardTokenSymbol: "USDT",
+        status: IReferralStatus.WITHDRAWN,
+    },
+    {
+        date: "23-04-2022",
+        address: "0xaa42274d4B6369fd9fEb349Bf4eFBC14A649e3Fd",
+        rewardAmount: "20",
+        rewardTokenSymbol: "USDT",
+        status: IReferralStatus.WITHDRAWN,
+    },
+    {
+        date: "23-04-2022",
+        address: "0xaa42274d4B6369fd9fEb349Bf4eFBC14A649e3Fd",
+        rewardAmount: "20",
+        rewardTokenSymbol: "USDT",
+        status: IReferralStatus.WITHDRAWN,
+    },
+    {
+        date: "23-04-2022",
+        address: "0xaa42274d4B6369fd9fEb349Bf4eFBC14A649e3Fd",
+        rewardAmount: "20",
+        rewardTokenSymbol: "USDT",
+        status: IReferralStatus.WITHDRAWN,
+    },
+    {
+        date: "23-04-2022",
+        address: "0xaa42274d4B6369fd9fEb349Bf4eFBC14A649e3Fd",
+        rewardAmount: "20",
+        rewardTokenSymbol: "USDT",
+        status: IReferralStatus.WITHDRAWN,
+    },
+    {
+        date: "23-04-2022",
+        address: "0xaa42274d4B6369fd9fEb349Bf4eFBC14A649e3Fd",
+        rewardAmount: "20",
+        rewardTokenSymbol: "USDT",
+        status: IReferralStatus.WITHDRAWN,
+    },
+    {
+        date: "23-04-2022",
+        address: "0xaa42274d4B6369fd9fEb349Bf4eFBC14A649e3Fd",
+        rewardAmount: "20",
+        rewardTokenSymbol: "USDT",
+        status: IReferralStatus.WITHDRAWN,
+    },
+    {
+        date: "23-04-2022",
+        address: "0xaa42274d4B6369fd9fEb349Bf4eFBC14A649e3Fd",
+        rewardAmount: "20",
+        rewardTokenSymbol: "USDT",
+        status: IReferralStatus.WITHDRAWN,
+    },
+    {
+        date: "23-04-2022",
+        address: "0xaa42274d4B6369fd9fEb349Bf4eFBC14A649e3Fd",
+        rewardAmount: "20",
+        rewardTokenSymbol: "USDT",
+        status: IReferralStatus.WITHDRAWN,
+    },
+    {
+        date: "23-04-2022",
+        address: "0xaa42274d4B6369fd9fEb349Bf4eFBC14A649e3Fd",
+        rewardAmount: "20",
+        rewardTokenSymbol: "USDT",
+        status: IReferralStatus.WITHDRAWN,
+    },
+];
