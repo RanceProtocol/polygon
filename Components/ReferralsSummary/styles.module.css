@@ -6,9 +6,13 @@
     p-6
     bg-theme-secondary-alpha-4
     w-64
+    max-w-full
     rounded-xl
     mx-auto
-    self-start;
+    self-start
+    order-3
+    md:order-4
+    mb-8;
 }
 .available__balance__text {
     @apply text-xs

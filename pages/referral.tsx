@@ -2,14 +2,20 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/referral.module.css";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import GenerateReferralLink from "../Components/GenerateReferralLink";
 import NoCommisionsYet from "../Components/NoCommissionsYet";
 import ReferralLink from "../Components/ReferralLink";
 import ReferralsSummary from "../Components/ReferralsSummary";
 import ReferralRecordTable from "../Components/ReferralRecordTable";
+import { useWeb3React } from "@web3-react/core";
+import ReferralBanner from "../Components/ReferralBanner";
 
 const Referral: NextPage = () => {
+    const { account } = useWeb3React();
+    const [refCode, setRefCode] = useState("RP54654534");
+    const [referralRecord, setReferralRecord] = useState(["gkg"]);
+
     return (
         <Fragment>
             <div className={styles.container}>
@@ -17,33 +23,37 @@ const Referral: NextPage = () => {
                     <title>Rance Protocol - Referral</title>
                 </Head>
                 <main className={styles.main}>
-                    <div className={styles.banner}>
-                        <div className={styles.banner__container}>
-                            <h1 className={styles.banner__header}>Referrals</h1>
-                            <p className={styles.banner__text}>
-                                When your direct referrals buy an insurance
-                                package, you are given a % of the package fee
-                                plus other indirect commisions.
-                            </p>
-                        </div>
-                        <div className={styles.banner__image__container}>
-                            <Image
-                                src="/referral-banner-image.png"
-                                alt="staking page banner"
-                                layout="fill"
-                                className={styles.banner__image}
+                    {!account ? (
+                        <>
+                            <ReferralBanner />
+                            {/* this div is a workaround for the component below to be the third grid iten */}
+                            <div></div>
+                            <div className={styles.message}>
+                                <p>Please connect your wallet</p>
+                            </div>
+                        </>
+                    ) : refCode ? (
+                        <>
+                            <ReferralBanner />
+                            <ReferralLink refCode={refCode} />
+                            {!!referralRecord.length ? (
+                                <ReferralRecordTable />
+                            ) : (
+                                <NoCommisionsYet />
+                            )}
+                            <ReferralsSummary
+                                referralCount={0}
+                                rewardBalances={["0 USDC", "0 USDT"]}
                             />
-                        </div>
-                    </div>
-                    <ReferralLink refCode={"rpFGR53H554YT"} />
-                    <ReferralRecordTable />
-
-                    <ReferralsSummary
-                        referralCount={0}
-                        rewardBalances={["0 USDC", "0 USDT"]}
-                    />
-                    {/* <GenerateReferralLink /> */}
-                    {/* <NoCommisionsYet /> */}
+                        </>
+                    ) : (
+                        <>
+                            <ReferralBanner />
+                            {/* this div is a workaround for the component below to be the third grid iten */}
+                            <div></div>
+                            <GenerateReferralLink />
+                        </>
+                    )}
                 </main>
             </div>
         </Fragment>

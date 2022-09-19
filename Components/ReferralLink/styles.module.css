@@ -11,7 +11,7 @@
 }
 
 .ref__link__input {
-    @apply w-64 py-3 px-3 rounded-full bg-theme-white-alpha-2 border border-theme-gray-4 text-[0.6rem] text-theme-gray-4;
+    @apply w-64 max-w-full py-3 px-3 rounded-full bg-theme-white-alpha-2 border border-theme-gray-4 text-[0.6rem] text-theme-gray-4;
 }
 .icon__btn {
     @apply w-8

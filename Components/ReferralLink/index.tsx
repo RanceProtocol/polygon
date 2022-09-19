@@ -15,7 +15,7 @@ const ReferralLink: FC<IProp> = ({ refCode }) => {
                 Copy link or share via socials
             </p>
             <input
-                type="text"
+                type="url"
                 value={`https://polygon.ranceprotocol.com?ref=${refCode}`}
                 className={styles.ref__link__input}
                 readOnly
