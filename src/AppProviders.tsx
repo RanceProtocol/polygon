@@ -8,7 +8,6 @@ interface Props {
     children: ReactNode;
 }
 
-
 const AppProviders: FC<Props> = ({ children }) => {
     return (
         <Provider store={store}>
