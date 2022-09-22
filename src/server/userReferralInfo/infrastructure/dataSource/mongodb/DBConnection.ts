@@ -9,6 +9,7 @@ const DBConnection =
         }
         // Use new db connection
         await mongoose.connect(process.env.db_connection_string as string);
+
         return handler(req, res);
     };
 

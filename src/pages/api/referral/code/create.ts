@@ -6,16 +6,24 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method !== "POST") return res.status(404);
 
     const { message, signature, address } = req.body;
+    if (!message || !signature || !address)
+        return res
+            .status(400)
+            .json({
+                message: "message, signature and address are all required!",
+            });
 
     try {
-        const referralInfo = createUserReferralInfo.execute(
+        const referralInfo = await createUserReferralInfo.execute(
             message,
             signature,
             address
         );
         return res.status(200).json(referralInfo);
     } catch (error: any) {
-        res.status(error.status || 500).json(error.message);
+        res.status(error.code || 500).json({
+            message: error.message || "An unknown error occured.",
+        });
     }
 };
 

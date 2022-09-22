@@ -7,13 +7,21 @@ class GetUserReferralCode {
         this.userReferralInfoRepository = userReferralInfoRepository;
     }
 
-    async execute(address: string): Promise<string> {
+    async execute(address: string): Promise<string | null> {
         try {
+            const isValidAddress = /^0x[a-fA-F0-9]{40}$/.test(address);
+            if (!isValidAddress)
+                throw {
+                    code: 400,
+                    message: "invalid user address",
+                };
             const referralInfo = await this.userReferralInfoRepository.get({
-                address: address,
+                address: address.toLowerCase(),
             });
+            if (!referralInfo) return null;
+
             return referralInfo.code;
-        } catch (error) {
+        } catch (error: any) {
             throw error;
         }
     }

@@ -5,12 +5,21 @@ import DBConnection from "../../../../server/userReferralInfo/infrastructure/dat
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method !== "GET") return res.status(404);
     const { code } = req.body;
+    if (!code)
+        return res.status(400).json({ message: "referral code is required!" });
 
     try {
-        const referralAddress = getUserReferralAddress.execute(code);
-        return res.status(200).json(referralAddress);
+        const referralAddress = await getUserReferralAddress.execute(code);
+        if (!referralAddress)
+            return res
+                .status(404)
+                .json({ message: "No Record found for this code" });
+
+        return res.status(200).json({ address: referralAddress });
     } catch (error: any) {
-        res.status(error.status || 500).json(error.message);
+        res.status(error.status || 500).json({
+            message: error.message || "An unknown error occured.",
+        });
     }
 };
 

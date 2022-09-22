@@ -3,6 +3,10 @@ import { IUserReferralInfoRepository } from "../interfaces/repositories/userRefe
 import { verifySignature } from "./utils.ts/signature";
 import { nanoid } from "nanoid";
 import { IuserReferralInfo } from "../entities/userReferralInfo";
+import {
+    formatMongoDBValidationError,
+    formatMongoDBDuplicateKeyError,
+} from "../../infrastructure/dataSource/mongodb/utils/errors";
 
 class CreateUserReferralInfo {
     private userReferralInfoRepository: IUserReferralInfoRepository;
@@ -27,7 +31,7 @@ class CreateUserReferralInfo {
             if (!isVerified) {
                 const err = {
                     message: "Signature and signer do not match",
-                    status: 401,
+                    code: 401,
                 };
                 throw err;
             }
@@ -40,7 +44,14 @@ class CreateUserReferralInfo {
                 address: result.address,
                 code: result.code,
             };
-        } catch (error) {
+        } catch (error: any) {
+            if (error.name === "ValidationError") {
+                const err = formatMongoDBValidationError(error);
+                throw err;
+            } else if (error.code && error.code == 11000) {
+                const err = formatMongoDBDuplicateKeyError(error);
+                throw err;
+            }
             throw error;
         }
     }

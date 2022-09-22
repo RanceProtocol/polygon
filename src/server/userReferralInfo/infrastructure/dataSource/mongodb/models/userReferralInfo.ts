@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, models } from "mongoose";
 
 const userReferralInfoSchema = new Schema({
     address: {
@@ -11,8 +11,9 @@ const userReferralInfoSchema = new Schema({
         type: String,
         required: [true, "referral code cannot be blank"],
         unique: true,
-        match: [/^[A-Za-z0-9_-]{14}}$/, "invalid ref code"],
+        match: [/^[A-Za-z0-9_-]{15}$/, "invalid refferal code"],
     },
 });
 
-export default model("userReferralInfo", userReferralInfoSchema);
+export default models.userReferralInfo ||
+    model("userReferralInfo", userReferralInfoSchema);

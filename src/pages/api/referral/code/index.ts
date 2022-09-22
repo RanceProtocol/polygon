@@ -7,11 +7,22 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const { address } = req.body;
 
+    if (!address)
+        return res.status(400).json({ message: "user address is required!" });
+
     try {
-        const referralCode = getUserReferralCode.execute(address);
-        return res.status(200).json(referralCode);
+        const referralCode = await getUserReferralCode.execute(address);
+
+        if (!referralCode)
+            return res
+                .status(404)
+                .json({ message: "No Record found for this user address" });
+
+        return res.status(200).json({ code: referralCode });
     } catch (error: any) {
-        res.status(error.status || 500).json(error.message);
+        res.status(error.code || 500).json({
+            message: error.message || "An unknown error occured.",
+        });
     }
 };
 
