@@ -19,6 +19,6 @@ class GetUserReferralCode {
     }
 }
 
-export const getUserReferralAddress = new GetUserReferralCode(
+export const getUserReferralCode = new GetUserReferralCode(
     userReferralInfoRepository
 );

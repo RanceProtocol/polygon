@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { NextApiRequest, NextApiResponse } from "next";
 
-const useDBConnection =
+const DBConnection =
     (handler: any) => async (req: NextApiRequest, res: NextApiResponse) => {
         if (mongoose.connections[0].readyState) {
             // Use current db connection
@@ -12,4 +12,4 @@ const useDBConnection =
         return handler(req, res);
     };
 
-export default useDBConnection;
+export default DBConnection;
