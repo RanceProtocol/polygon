@@ -7,9 +7,12 @@ class GetUserReferralAddress {
         this.userReferralInfoRepository = userReferralInfoRepository;
     }
 
-    async execute(code: string) {
+    async execute(code: string): Promise<string> {
         try {
-            // get the record with the code
+            const referralInfo = await this.userReferralInfoRepository.get({
+                code: code,
+            });
+            return referralInfo.address;
         } catch (error) {
             throw error;
         }

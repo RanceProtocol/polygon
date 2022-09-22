@@ -11,7 +11,7 @@ const userReferralInfoSchema = new Schema({
         type: String,
         required: [true, "referral code cannot be blank"],
         unique: true,
-        match: [/^[a-zA-Z0-9]{6}$/, "invalid ref code"],
+        match: [/^[A-Za-z0-9_-]{14}}$/, "invalid ref code"],
     },
 });
 
