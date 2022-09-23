@@ -1,6 +1,6 @@
 import { Schema, model, models } from "mongoose";
 
-const userReferralInfoSchema = new Schema({
+const userReferralRecordSchema = new Schema({
     address: {
         type: String,
         required: [true, "user address cannot be blank"],
@@ -15,5 +15,5 @@ const userReferralInfoSchema = new Schema({
     },
 });
 
-export default models.userReferralInfo ||
-    model("userReferralInfo", userReferralInfoSchema);
+export default models.UserReferralRecord ||
+    model("UserReferralRecord", userReferralRecordSchema);
