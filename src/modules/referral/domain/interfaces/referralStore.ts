@@ -1,4 +1,4 @@
-import { IReferralReward } from "./entities";
+import { IReferralReward } from "../entities";
 
 interface IReferralStore {
     loadingReferralRecord: boolean;

@@ -1,4 +1,4 @@
-import useTransaction, { SendParams } from "../../../hooks/useTransaction";
+import { SendParams } from "../../../hooks/useTransaction";
 import { Staking1 } from "../../../typechain";
 
 interface CompoundParams {

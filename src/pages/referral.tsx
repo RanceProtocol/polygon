@@ -10,11 +10,17 @@ import ReferralsSummary from "../Components/ReferralsSummary";
 import ReferralRecordTable from "../Components/ReferralRecordTable";
 import { useWeb3React } from "@web3-react/core";
 import ReferralBanner from "../Components/ReferralBanner";
+import { referralState } from "../modules/referral/ui/redux/state";
 
 const Referral: NextPage = () => {
     const { account } = useWeb3React();
-    const [refCode, setRefCode] = useState("RP54654534");
-    const [referralRecord, setReferralRecord] = useState(["gkg"]);
+
+    const {
+        loadingReferralRecord,
+        loadingReferralCode,
+        referralRecord,
+        referralCode,
+    } = referralState();
 
     return (
         <Fragment>
@@ -26,16 +32,16 @@ const Referral: NextPage = () => {
                     {!account ? (
                         <>
                             <ReferralBanner />
-                            {/* this div is a workaround for the component below to be the third grid iten */}
+                            {/* this div is a workaround so that the component below to be the third grid iten */}
                             <div></div>
                             <div className={styles.message}>
                                 <p>Please connect your wallet</p>
                             </div>
                         </>
-                    ) : refCode ? (
+                    ) : referralCode ? (
                         <>
                             <ReferralBanner />
-                            <ReferralLink refCode={refCode} />
+                            <ReferralLink refCode={referralCode} />
                             {!!referralRecord.length ? (
                                 <ReferralRecordTable />
                             ) : (
@@ -49,7 +55,7 @@ const Referral: NextPage = () => {
                     ) : (
                         <>
                             <ReferralBanner />
-                            {/* this div is a workaround for the component below to be the third grid iten */}
+                            {/* this div is a workaround so that the component below to be the third grid iten */}
                             <div></div>
                             <GenerateReferralLink />
                         </>

@@ -9,7 +9,7 @@ import {
     initializePackagePlans as initializePackagePlansAction,
     intializeUserPackages as intializeUserPackagesAction,
     removeUserPackage as removeUserPackageAction,
-} from "../ui/redux/actions";
+} from "../infrastructure/redux/actions";
 import { insure as insureUseCase } from "../usecases/insure";
 import { cancelInsurance as cancelInsuranceUseCase } from "../usecases/cancelInsurance";
 import { withdrawInsurance as withdrawInsuranceUseCase } from "../usecases/withdrawInsurance";
