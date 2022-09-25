@@ -3,6 +3,7 @@ import styles from "./styles.module.css";
 import { AiOutlineLink, AiOutlineTwitter } from "react-icons/ai";
 import { FaDiscord } from "react-icons/fa";
 import clsx from "clsx";
+import { TwitterShareButton } from "react-share";
 
 interface IProp {
     refLink: string;
@@ -29,7 +30,18 @@ const ReferralLink: FC<IProp> = ({ refLink, copyReferralLinkHandler }) => {
                     <AiOutlineLink />
                 </button>
                 <button className={styles.icon__btn}>
-                    <AiOutlineTwitter />
+                    <TwitterShareButton
+                        title="Stabilise coins on Rance Protocol at your desired price with up to 2 years Insurance protection by using this link"
+                        url={refLink}
+                        hashtags={[
+                            "DeFi",
+                            "crypto",
+                            "blockchain",
+                            "cryptocurrency",
+                        ]}
+                    >
+                        <AiOutlineTwitter />
+                    </TwitterShareButton>
                 </button>
                 <button className={styles.icon__btn}>
                     <FaDiscord />
