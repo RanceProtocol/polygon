@@ -71,14 +71,16 @@ const Referral: NextPage = () => {
                             />
                         </>
                     ) : (
-                        <>
-                            <ReferralBanner />
-                            {/* this div is a workaround so that the component below to be the third grid iten */}
-                            <div></div>
-                            <GenerateReferralLink
-                                generateLinkHandler={genarateReferralLink}
-                            />
-                        </>
+                        loadingreferralLink === false && (
+                            <>
+                                <ReferralBanner />
+                                {/* this div is a workaround so that the component below to be the third grid iten */}
+                                <div></div>
+                                <GenerateReferralLink
+                                    generateLinkHandler={genarateReferralLink}
+                                />
+                            </>
+                        )
                     )}
                 </main>
             </div>
