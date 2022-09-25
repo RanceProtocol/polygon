@@ -4,6 +4,7 @@ import CustomToast, { STATUS, TYPE } from "../../../../Components/CustomToast";
 import { RanceProtocol } from "../../../../typechain";
 import { generateReferralLink as generateReferralLinkUsecase } from "../../usecases/generateReferralLink";
 import { getReferralLink as getReferralLinkUsecase } from "../../usecases/getReferralLink";
+import { getReferrerAddress as getReferrerAddressUsecase } from "../../usecases/getReferrerAddress";
 import { IApiClientWrapper } from "../interfaces/apiClientWrapper";
 import * as actionTypes from "./actionTypes";
 
@@ -41,24 +42,40 @@ export const getReferralLink =
         }
     };
 
-export const getReferralRecord =
-    (contract: RanceProtocol, userAddress: string | null | undefined) =>
+export const getReferrerAddress =
+    (link: string, apiClient: IApiClientWrapper) =>
     async (
         dispatch: Dispatch<{ type: string; payload?: any }>
     ): Promise<void> => {
         dispatch({
-            type: actionTypes.GET__REFERRAL__RECORD,
+            type: actionTypes.GET__REFERRER__ADDRESS,
         });
 
         try {
-            // call the usecase that will return the referral record here and dispatch GET__REFERRAL__RECORD__SUCCESS with the payload
-        } catch (error) {
+            const address = await getReferrerAddressUsecase(link, apiClient);
             dispatch({
-                type: actionTypes.GET__REFERRAL__RECORD__FAILED,
+                type: actionTypes.GET__REFERRER__ADDRESS__SUCCESS,
+                payload: { referrerAddress: address },
+            });
+        } catch (error: any) {
+            if (error.response?.status === 404) {
+                const toastBody = CustomToast({
+                    message: "invalid referral link",
+                    status: STATUS.ERROR,
+                    type: TYPE.ERROR,
+                });
+                toast(toastBody);
+                return dispatch({
+                    type: actionTypes.GET__REFERRER__ADDRESS__SUCCESS,
+                    payload: { referralLink: null },
+                });
+            }
+
+            dispatch({
+                type: actionTypes.GET__REFERRER__ADDRESS__FAILED,
             });
             const toastBody = CustomToast({
-                message:
-                    "Error getting user referral record! Please reload the page",
+                message: error.message,
                 status: STATUS.ERROR,
                 type: TYPE.ERROR,
             });
@@ -105,6 +122,30 @@ export const genarateReferralLink =
                 message:
                     error.message ||
                     "Error generating your refferal link! Please try again",
+                status: STATUS.ERROR,
+                type: TYPE.ERROR,
+            });
+            toast(toastBody);
+        }
+    };
+
+export const getReferralRecord =
+    (contract: RanceProtocol, userAddress: string | null | undefined) =>
+    async (
+        dispatch: Dispatch<{ type: string; payload?: any }>
+    ): Promise<void> => {
+        dispatch({
+            type: actionTypes.GET__REFERRAL__RECORD,
+        });
+
+        try {
+        } catch (error) {
+            dispatch({
+                type: actionTypes.GET__REFERRAL__RECORD__FAILED,
+            });
+            const toastBody = CustomToast({
+                message:
+                    "Error getting user referral record! Please reload the page",
                 status: STATUS.ERROR,
                 type: TYPE.ERROR,
             });
