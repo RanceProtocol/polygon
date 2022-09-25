@@ -7,6 +7,7 @@ const initialState: IReferralStore = {
     loadingreferralLink: false,
     referralRecord: [],
     referralLink: null,
+    referrerAddress: null,
 };
 
 export const referralReducer = (
@@ -27,6 +28,11 @@ export const referralReducer = (
             return {
                 ...state,
                 loadingreferralLink: false,
+            };
+        case actionTypes.SET__REFERRER__ADDRESS:
+            return {
+                ...state,
+                referrerAddress: payload.referrerAddress,
             };
         case actionTypes.GET__REFERRAL__RECORD:
             return { ...state, loadingReferralRecord: true };

@@ -18,7 +18,6 @@ export const getReferralLink =
         });
 
         try {
-            // call the usecase that will return the ref code here and dispatch GET__REFERRAL__LINK__SUCCESS with the payload
             const link = await getReferralLinkUsecase(address, apiClient);
             dispatch({
                 type: actionTypes.GET__REFERRAL__LINK__SUCCESS,
@@ -47,39 +46,26 @@ export const getReferrerAddress =
     async (
         dispatch: Dispatch<{ type: string; payload?: any }>
     ): Promise<void> => {
-        dispatch({
-            type: actionTypes.GET__REFERRER__ADDRESS,
-        });
-
         try {
-            const address = await getReferrerAddressUsecase(link, apiClient);
+            const code = link.includes("ref=") ? link.split("ref=")[1] : null;
+            if (!code) return;
+
+            const address = await getReferrerAddressUsecase(code, apiClient);
             dispatch({
-                type: actionTypes.GET__REFERRER__ADDRESS__SUCCESS,
+                type: actionTypes.SET__REFERRER__ADDRESS,
                 payload: { referrerAddress: address },
             });
         } catch (error: any) {
-            if (error.response?.status === 404) {
-                const toastBody = CustomToast({
-                    message: "invalid referral link",
-                    status: STATUS.ERROR,
-                    type: TYPE.ERROR,
-                });
-                toast(toastBody);
-                return dispatch({
-                    type: actionTypes.GET__REFERRER__ADDRESS__SUCCESS,
-                    payload: { referralLink: null },
-                });
-            }
-
-            dispatch({
-                type: actionTypes.GET__REFERRER__ADDRESS__FAILED,
-            });
             const toastBody = CustomToast({
                 message: error.message,
                 status: STATUS.ERROR,
                 type: TYPE.ERROR,
             });
             toast(toastBody);
+            return dispatch({
+                type: actionTypes.SET__REFERRER__ADDRESS,
+                payload: { referralLink: null },
+            });
         }
     };
 

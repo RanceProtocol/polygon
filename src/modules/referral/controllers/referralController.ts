@@ -9,6 +9,7 @@ import {
     getReferralLink as getReferralLinkAction,
     getReferralRecord as getReferralRecordAction,
     genarateReferralLink as genarateReferralLinkAction,
+    getReferrerAddress as getReferrerAddressAction,
 } from "../infrastructure/redux/actions";
 import { copyReferralLink as copyReferralLinkUsecase } from "../usecases/copyReferralLink";
 // import { watchEvent } from "../../../utils/events";
@@ -51,6 +52,13 @@ export const useReferralViewModel = (props: IProps) => {
         // await getReferralRecordAction(insuranceContract, address)(dispatch);
     }, [address, insuranceContract, dispatch]);
 
+    const getReferrerAddress = useCallback(
+        async (referralLink: string): Promise<void> => {
+            await getReferrerAddressAction(referralLink, apiClient)(dispatch);
+        },
+        [dispatch]
+    );
+
     const genarateReferralLink = useCallback(async (): Promise<void> => {
         if (!address) return;
 
@@ -76,6 +84,7 @@ export const useReferralViewModel = (props: IProps) => {
 
     return {
         initialize,
+        getReferrerAddress,
         genarateReferralLink,
         copyReferralLink,
     };
