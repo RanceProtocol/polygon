@@ -1,7 +1,7 @@
 import { userReferralInfoRepository } from "../../infrastructure/reposositories/userReferralInfoRepository";
 import { IUserReferralInfoRepository } from "../interfaces/repositories/userReferralInfoRepository";
 
-class GetUserReferralCode {
+class GetUserreferralCode {
     private userReferralInfoRepository: IUserReferralInfoRepository;
     constructor(userReferralInfoRepository: IUserReferralInfoRepository) {
         this.userReferralInfoRepository = userReferralInfoRepository;
@@ -27,6 +27,6 @@ class GetUserReferralCode {
     }
 }
 
-export const getUserReferralCode = new GetUserReferralCode(
+export const getUserreferralCode = new GetUserreferralCode(
     userReferralInfoRepository
 );

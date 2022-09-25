@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/referral.module.css";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import GenerateReferralLink from "../Components/GenerateReferralLink";
 import NoCommisionsYet from "../Components/NoCommissionsYet";
 import ReferralLink from "../Components/ReferralLink";
@@ -10,17 +10,32 @@ import ReferralsSummary from "../Components/ReferralsSummary";
 import ReferralRecordTable from "../Components/ReferralRecordTable";
 import { useWeb3React } from "@web3-react/core";
 import ReferralBanner from "../Components/ReferralBanner";
-import { referralState } from "../modules/referral/ui/redux/state";
+import { useReferralViewModel } from "../modules/referral/controllers/referralController";
+import { referralState } from "../modules/referral/infrastructure/redux/state";
 
 const Referral: NextPage = () => {
-    const { account } = useWeb3React();
+    const { account, library, connector } = useWeb3React();
 
     const {
         loadingReferralRecord,
-        loadingReferralCode,
+        loadingreferralLink,
         referralRecord,
-        referralCode,
+        referralLink,
     } = referralState();
+
+    const { initialize, genarateReferralLink, copyReferralLink } =
+        useReferralViewModel({
+            address: account,
+            provider: library,
+            connector,
+        });
+
+    useEffect(() => {
+        (async () => {
+            initialize();
+        })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [account]);
 
     return (
         <Fragment>
@@ -38,10 +53,13 @@ const Referral: NextPage = () => {
                                 <p>Please connect your wallet</p>
                             </div>
                         </>
-                    ) : referralCode ? (
+                    ) : referralLink ? (
                         <>
                             <ReferralBanner />
-                            <ReferralLink refCode={referralCode} />
+                            <ReferralLink
+                                refLink={referralLink}
+                                copyReferralLinkHandler={copyReferralLink}
+                            />
                             {!!referralRecord.length ? (
                                 <ReferralRecordTable />
                             ) : (
@@ -57,7 +75,9 @@ const Referral: NextPage = () => {
                             <ReferralBanner />
                             {/* this div is a workaround so that the component below to be the third grid iten */}
                             <div></div>
-                            <GenerateReferralLink />
+                            <GenerateReferralLink
+                                generateLinkHandler={genarateReferralLink}
+                            />
                         </>
                     )}
                 </main>

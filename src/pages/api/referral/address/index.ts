@@ -4,7 +4,7 @@ import DBConnection from "../../../../server/userReferralInfo/infrastructure/dat
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method !== "GET") return res.status(404);
-    const { code } = req.body;
+    const code = req.query.code as string;
     if (!code)
         return res.status(400).json({ message: "referral code is required!" });
 

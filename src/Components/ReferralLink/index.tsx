@@ -5,10 +5,11 @@ import { FaDiscord } from "react-icons/fa";
 import clsx from "clsx";
 
 interface IProp {
-    refCode: string;
+    refLink: string;
+    copyReferralLinkHandler: (link: string) => void;
 }
 
-const ReferralLink: FC<IProp> = ({ refCode }) => {
+const ReferralLink: FC<IProp> = ({ refLink, copyReferralLinkHandler }) => {
     return (
         <div className={styles.root}>
             <p className={styles.ref__link__text}>
@@ -16,13 +17,14 @@ const ReferralLink: FC<IProp> = ({ refCode }) => {
             </p>
             <input
                 type="url"
-                value={`https://polygon.ranceprotocol.com?ref=${refCode}`}
+                value={refLink}
                 className={styles.ref__link__input}
                 readOnly
             />
             <div className={styles.icons__btn__container}>
                 <button
                     className={clsx(styles.icon__btn, styles.link__icon__btn)}
+                    onClick={() => copyReferralLinkHandler(refLink)}
                 >
                     <AiOutlineLink />
                 </button>

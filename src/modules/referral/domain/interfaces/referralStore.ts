@@ -2,9 +2,9 @@ import { IReferralReward } from "../entities";
 
 interface IReferralStore {
     loadingReferralRecord: boolean;
-    loadingReferralCode: boolean;
+    loadingreferralLink: boolean;
     referralRecord: IReferralReward[];
-    referralCode: string | null;
+    referralLink: string | null;
 }
 
 export default IReferralStore;

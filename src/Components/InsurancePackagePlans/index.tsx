@@ -5,11 +5,11 @@ import InsurancePackagePlanCardSkeleton from "./insurancePackagePlanCardSkeleton
 import PackagePurchaseModal from "../PackagePurchaseModal";
 import { useWeb3React } from "@web3-react/core";
 import { useInsuranceViewModel } from "../../modules/insurance/controllers/insuranceViewModel";
-import { insuranceState } from "../../modules/insurance/ui/redux/state";
 import { IInsurancePackagePlan } from "../../modules/insurance/domain/entities";
 import SuccessModal from "../SuccessModal";
 import { useRouter } from "next/router";
 import { insurancePageTabs } from "../../constants/routes";
+import { insuranceState } from "../../modules/insurance/infrastructure/redux/state";
 
 interface IProp {}
 

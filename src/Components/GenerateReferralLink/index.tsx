@@ -2,9 +2,11 @@ import Image from "next/image";
 import { FC } from "react";
 import styles from "./styles.module.css";
 
-interface IProp {}
+interface IProp {
+    generateLinkHandler: () => Promise<void>;
+}
 
-const GenerateReferralLink: FC<IProp> = () => {
+const GenerateReferralLink: FC<IProp> = ({ generateLinkHandler }) => {
     return (
         <div className={styles.root}>
             <div className={styles.no__ref__code__image__container}>
@@ -19,7 +21,10 @@ const GenerateReferralLink: FC<IProp> = () => {
                 You do not have a referral code yet. Generate one to start
                 earning commissions on referrals
             </p>
-            <button className={styles.generate__link__button}>
+            <button
+                className={styles.generate__link__button}
+                onClick={generateLinkHandler}
+            >
                 Generate link
             </button>
         </div>

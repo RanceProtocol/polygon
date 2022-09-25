@@ -4,7 +4,7 @@ import React, { FC, useEffect, useState } from "react";
 import ModalWrapper from "../ModalWrapper";
 import styles from "./styles.module.css";
 import { BigNumber, utils } from "ethers";
-import { insuranceState } from "../../modules/insurance/ui/redux/state";
+import { insuranceState } from "../../modules/insurance/infrastructure/redux/state";
 import { IInsurancePackage } from "../../modules/insurance/domain/entities";
 import { ranceProtocol, tokens } from "../../constants/addresses";
 import { getCurrentTimestamp } from "../../utils/time";

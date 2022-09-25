@@ -4,9 +4,9 @@ import * as actionTypes from "./actionTypes";
 
 const initialState: IReferralStore = {
     loadingReferralRecord: false,
-    loadingReferralCode: false,
+    loadingreferralLink: false,
     referralRecord: [],
-    referralCode: null,
+    referralLink: null,
 };
 
 export const referralReducer = (
@@ -15,18 +15,18 @@ export const referralReducer = (
 ): IReferralStore => {
     const { type, payload } = action;
     switch (type) {
-        case actionTypes.GET__REFERRAL__CODE:
-            return { ...state, loadingReferralCode: true };
-        case actionTypes.GET__REFERRAL__CODE__SUCCESS:
+        case actionTypes.GET__REFERRAL__LINK:
+            return { ...state, loadingreferralLink: true };
+        case actionTypes.GET__REFERRAL__LINK__SUCCESS:
             return {
                 ...state,
-                referralCode: payload.referralCode,
-                loadingReferralCode: false,
+                referralLink: payload.referralLink,
+                loadingreferralLink: false,
             };
-        case actionTypes.GET__REFERRAL__CODE__FAILED:
+        case actionTypes.GET__REFERRAL__LINK__FAILED:
             return {
                 ...state,
-                loadingReferralCode: false,
+                loadingreferralLink: false,
             };
         case actionTypes.GET__REFERRAL__RECORD:
             return { ...state, loadingReferralRecord: true };
@@ -39,15 +39,15 @@ export const referralReducer = (
         case actionTypes.GET__REFERRAL__RECORD__FAILED:
             return { ...state, loadingReferralRecord: false };
         case actionTypes.GENERATING__REFERRAL__LINK:
-            return { ...state, loadingReferralCode: true };
+            return { ...state, loadingreferralLink: true };
         case actionTypes.GENERATE__REFERRAL__LINK__SUCCESS:
             return {
                 ...state,
-                loadingReferralCode: false,
-                referralCode: payload.referralCode,
+                loadingreferralLink: false,
+                referralLink: payload.referralLink,
             };
         case actionTypes.GENERATE__REFERRAL__LINK__FAILED:
-            return { ...state, loadingReferralCode: false };
+            return { ...state, loadingreferralLink: false };
 
         default:
             return state;

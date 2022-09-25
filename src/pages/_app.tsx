@@ -8,12 +8,12 @@ import axios from "axios";
 function MyApp({ Component, pageProps }: AppProps) {
     useEffect(() => {
         axios
-            .get("/api/referral/code", {
+            .post("/api/referral/code", {
                 data: JSON.stringify({
                     address: "0xd5E4484326EB3Dd5FBbd5Def6d02aFE817fD4684",
                 }),
             })
-            .then((res) => console.log("response: ", res));
+            .then((res) => console.log("response xxxxxxxxxx: ", res));
     }, []);
 
     return (

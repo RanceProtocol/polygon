@@ -11,7 +11,7 @@ import { isValidAmountValue, truncateString } from "../../utils/helpers";
 import ModalWrapper from "../ModalWrapper";
 import styles from "./styles.module.css";
 import Select, { GroupBase, OptionsOrGroups, SingleValue } from "react-select";
-import { insuranceState } from "../../modules/insurance/ui/redux/state";
+import { insuranceState } from "../../modules/insurance/infrastructure/redux/state";
 import useLazyToken from "../../hooks/useLazyToken";
 import { ranceProtocol } from "../../constants/addresses";
 import { BigNumber, utils } from "ethers";

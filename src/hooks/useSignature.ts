@@ -6,7 +6,7 @@ import CustomToast, { STATUS, TYPE } from "../Components/CustomToast";
 
 export interface IParams {
     library: any;
-    connector: AbstractConnector;
+    connector: AbstractConnector | undefined;
     account: string;
 }
 
@@ -14,7 +14,7 @@ const useSignature = (params: IParams) => {
     const { library, connector, account } = params;
     const sign = async (message: string): Promise<string> => {
         try {
-            // if (window.BinanceChain && connector instanceof BscConnector) {
+            // if (window.BinanceChain && !!connector && connector instanceof BscConnector) {
             //   const { signature } = await window.BinanceChain.bnbSign(account, message)
             //   return signature
             // }
