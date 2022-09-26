@@ -36,3 +36,5 @@ export const masterRanceWallet = {
 };
 
 export const POLYGONMM_ROUTER = "0x51aba405de2b25e5506dea32a6697f450ceb1a17";
+
+export const multicall3 = "0xcA11bde05977b3631167028862bE2a173976CA11";
