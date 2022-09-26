@@ -15,6 +15,7 @@ import { cancelInsurance as cancelInsuranceUseCase } from "../usecases/cancelIns
 import { withdrawInsurance as withdrawInsuranceUseCase } from "../usecases/withdrawInsurance";
 import { watchEvent } from "../../../utils/events";
 import useTransaction from "../../../hooks/useTransaction";
+import useMulticall from "../../../hooks/useMulticall";
 
 interface IProps {
     address: string | null | undefined;
@@ -29,6 +30,7 @@ export const useInsuranceViewModel = (props: IProps) => {
     const { address, provider } = props;
     const dispatch = useDispatch();
     const { send } = useTransaction();
+    // const { multicall } = useMulticall(provider || getDefaultProvider());
 
     const insuranceContract = RanceProtocol__factory.connect(
         ranceProtocol[dappEnv],

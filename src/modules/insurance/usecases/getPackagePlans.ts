@@ -1,4 +1,5 @@
 import { getDurationData } from "../../../constants/data";
+import { Call } from "../../../hooks/useMulticall";
 import { RanceProtocol } from "../../../typechain";
 import type { RanceProtocol as IRanceProtocol } from "../../../typechain/RanceProtocol";
 import { structOutputToObject } from "../../../utils/helpers";
@@ -22,6 +23,18 @@ export const getPackagePlans = async (
         const packagePlansCompleteData = formatedObject.map((item) => {
             return { ...item, ...getDurationData(item.periodInSeconds) };
         });
+
+        // const calls = [
+        //     {
+        //         address: contract.address,
+        //         name: "getAllPackagePlans",
+        //         params: [0, 3],
+        //     },
+        // ];
+
+        // const res = await multicall(RanceProtocolAbi, calls);
+
+        // console.log("rrrrrrr: ", res);
 
         const insureCoinLength = await contract.getInsureCoinsLength();
         const insurableCoinsNames: string[] = await contract.getInsureCoins(
