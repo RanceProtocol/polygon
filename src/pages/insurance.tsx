@@ -45,42 +45,42 @@ const Insurance: NextPage = () => {
                                 <button
                                     onClick={() =>
                                         router.push(
-                                            `${router.pathname}?tab=${tabs.myPackages}`
-                                        )
-                                    }
-                                    className={clsx({
-                                        [styles.active_tab]:
-                                            String(tab).toLowerCase() !==
-                                            tabs.insurancePackages,
-                                        [styles.tab_btn]: true,
-                                    })}
-                                >
-                                    My Packages
-                                </button>
-                            </li>
-                            <li>
-                                <button
-                                    onClick={() =>
-                                        router.push(
                                             `${router.pathname}?tab=${tabs.insurancePackages}`
                                         )
                                     }
                                     className={clsx({
                                         [styles.active_tab]:
-                                            String(tab).toLowerCase() ===
-                                            tabs.insurancePackages,
+                                            String(tab).toLowerCase() !==
+                                            tabs.myPackages,
                                         [styles.tab_btn]: true,
                                     })}
                                 >
                                     Insurance Packages
                                 </button>
                             </li>
+                            <li>
+                                <button
+                                    onClick={() =>
+                                        router.push(
+                                            `${router.pathname}?tab=${tabs.myPackages}`
+                                        )
+                                    }
+                                    className={clsx({
+                                        [styles.active_tab]:
+                                            String(tab).toLowerCase() ===
+                                            tabs.myPackages,
+                                        [styles.tab_btn]: true,
+                                    })}
+                                >
+                                    My Packages
+                                </button>
+                            </li>
                         </ul>
                     </div>
-                    {String(tab).toLowerCase() !== tabs.insurancePackages ? (
-                        <MyPackages />
-                    ) : (
+                    {String(tab).toLowerCase() !== tabs.myPackages ? (
                         <InsurancePackagePlans />
+                    ) : (
+                        <MyPackages />
                     )}
                 </main>
             </div>
