@@ -1,7 +1,7 @@
-import { multicall2Address } from "../constants/addresses";
-import { Interface } from "@ethersproject/abi";
-import { Multicall2__factory } from "../typechain";
 import { CallOverrides } from "ethers";
+import { Interface } from "@ethersproject/abi";
+import { multicall2Address } from "../constants/addresses";
+import { Multicall2__factory } from "../typechain";
 
 export interface Call {
     address: string; // Address of the contract
@@ -12,8 +12,7 @@ export interface Call {
 export interface MulticallOptions extends CallOverrides {
     requireSuccess?: boolean;
 }
-
-const useMulticall = (provider: any) => {
+export const getMulticall = (provider: any) => {
     const multicallContract = Multicall2__factory.connect(
         multicall2Address,
         provider
@@ -67,5 +66,3 @@ const useMulticall = (provider: any) => {
 
     return { multicall, multicall2 };
 };
-
-export default useMulticall;
