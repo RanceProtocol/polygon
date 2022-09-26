@@ -7,10 +7,15 @@ import { useWeb3React } from "@web3-react/core";
 import { toggleWalletModal } from "../../appState/shared/action";
 import { useDispatch } from "react-redux";
 import InsurableCoinsList from "./insurableCoinsList";
+import { referralState } from "../../modules/referral/infrastructure/redux/state";
 
 interface IProp extends IInsurancePackagePlan {
     insurableCoins: string[];
-    onClickAction: (data: { open: boolean; planId: string }) => void;
+    onClickAction: (data: {
+        open: boolean;
+        planId: string;
+        referrer: string | null;
+    }) => void;
 }
 
 const InsurancePackagePlanCard: FC<IProp> = (props) => {
@@ -25,6 +30,7 @@ const InsurancePackagePlanCard: FC<IProp> = (props) => {
         insurableCoins,
     } = props;
     const { account } = useWeb3React();
+    const { referrerAddress } = referralState();
 
     const dispatch = useDispatch();
 
@@ -63,7 +69,13 @@ const InsurancePackagePlanCard: FC<IProp> = (props) => {
             {account ? (
                 <button
                     className={styles.button}
-                    onClick={() => onClickAction({ open: true, planId })}
+                    onClick={() =>
+                        onClickAction({
+                            open: true,
+                            planId,
+                            referrer: referrerAddress,
+                        })
+                    }
                 >
                     Buy package
                 </button>

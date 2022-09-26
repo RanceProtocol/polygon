@@ -26,13 +26,13 @@ import Loading from "../SharedComponent/Loading";
 type addressType = keyof typeof ranceProtocol;
 
 interface IProps {
-    state: { open: boolean; planId: string };
+    state: { open: boolean; planId: string; referrer: string | null };
     onClose: () => void;
     onSuccessfull: () => void;
 }
 
 const PackagePurchaseModal: FC<IProps> = ({
-    state: { open, planId },
+    state: { open, planId, referrer },
     onClose,
     onSuccessfull,
 }) => {

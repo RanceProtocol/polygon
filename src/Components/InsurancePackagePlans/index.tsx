@@ -17,7 +17,8 @@ const InsurancePackagePlans: FC<IProp> = () => {
     const [packagePurchaseModal, setPackagePurchaseModal] = useState<{
         open: boolean;
         planId: string;
-    }>({ open: false, planId: "" });
+        referrer: string | null;
+    }>({ open: false, planId: "", referrer: null });
 
     const router = useRouter();
 
@@ -70,6 +71,7 @@ const InsurancePackagePlans: FC<IProp> = () => {
                                   onClickAction={(data: {
                                       open: boolean;
                                       planId: string;
+                                      referrer: string | null;
                                   }) => setPackagePurchaseModal(data)}
                               />
                           )
