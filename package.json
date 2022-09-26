@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "typechain": "typechain --target ethers-v5 --out-dir typechain constants/abis/*.json ",
+        "typechain": "typechain --target ethers-v5 --out-dir src/typechain src/constants/abis/*.json ",
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
