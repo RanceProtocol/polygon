@@ -49,7 +49,7 @@ export const useReferralViewModel = (props: IProps) => {
         // use Promise.all
         if (!address) return; //visit here later
         await getReferralLinkAction(address, apiClient)(dispatch);
-        // await getReferralRecordAction(insuranceContract, address)(dispatch);
+        await getReferralRecordAction(insuranceContract, address)(dispatch);
     }, [address, insuranceContract, dispatch]);
 
     const getReferrerAddress = useCallback(

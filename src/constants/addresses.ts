@@ -1,6 +1,6 @@
 export const ranceProtocol = {
     staging: "0x29062E2B9771FB81Cd088245B4137F538B65099b",
-    mainnet: "0xb61F97B7176b17f6732D457649D3E322FE5e5893",
+    mainnet: "0x8D9fdFD636229Ec36c5a5597e12374c7555ddC4E",
 };
 
 export const stakingContractAddresses = {

@@ -2,6 +2,7 @@ import { Dispatch } from "react";
 import { toast } from "react-toastify";
 import CustomToast, { STATUS, TYPE } from "../../../../Components/CustomToast";
 import { RanceProtocol } from "../../../../typechain";
+import { fetchUserReferralRecords } from "../../usecases/fetchUserReferralRecords";
 import { generateReferralLink as generateReferralLinkUsecase } from "../../usecases/generateReferralLink";
 import { getReferralLink as getReferralLinkUsecase } from "../../usecases/getReferralLink";
 import { getReferrerAddress as getReferrerAddressUsecase } from "../../usecases/getReferrerAddress";
@@ -125,6 +126,19 @@ export const getReferralRecord =
         });
 
         try {
+            if (!userAddress)
+                return dispatch({
+                    type: actionTypes.GET__REFERRAL__RECORD__SUCCESS,
+                    payload: { referralRecord: [] },
+                });
+            const referralRecord = await fetchUserReferralRecords(
+                contract,
+                userAddress
+            );
+            return dispatch({
+                type: actionTypes.GET__REFERRAL__RECORD__SUCCESS,
+                payload: { referralRecord },
+            });
         } catch (error) {
             dispatch({
                 type: actionTypes.GET__REFERRAL__RECORD__FAILED,

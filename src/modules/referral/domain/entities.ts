@@ -4,7 +4,7 @@ export interface IReferralReward {
     id: string;
     rewardAmount: BigNumber;
     rewardToken: string;
-    dateTime: string;
+    date: string;
     user: string;
     owner: string;
     claimed: boolean;

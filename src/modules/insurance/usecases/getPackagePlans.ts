@@ -1,5 +1,4 @@
 import { getDurationData } from "../../../constants/data";
-import { Call } from "../../../hooks/useMulticall";
 import { RanceProtocol } from "../../../typechain";
 import type { RanceProtocol as IRanceProtocol } from "../../../typechain/RanceProtocol";
 import { structOutputToObject } from "../../../utils/helpers";
