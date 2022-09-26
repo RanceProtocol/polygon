@@ -12,13 +12,13 @@ import {
     getReferrerAddress as getReferrerAddressAction,
 } from "../infrastructure/redux/actions";
 import { copyReferralLink as copyReferralLinkUsecase } from "../usecases/copyReferralLink";
-// import { watchEvent } from "../../../utils/events";
-// import useTransaction from "../../../hooks/useTransaction";
-import useSignature from "../../../hooks/useSignature";
+import { claimReferralRewards as claimReferralRewardsUsecase } from "../usecases/claimReferralRewards";
 import { AbstractConnector } from "@web3-react/abstract-connector";
 import { apiClient } from "../infrastructure/ApiClient/axios";
 import CustomToast, { STATUS, TYPE } from "../../../Components/CustomToast";
 import { toast } from "react-toastify";
+import useTransaction from "../../../hooks/useTransaction";
+import useSignature from "../../../hooks/useSignature";
 
 interface IProps {
     address: string | null | undefined;
@@ -33,7 +33,7 @@ const dappEnv: addressType = process.env
 export const useReferralViewModel = (props: IProps) => {
     const { address, provider, connector } = props;
     const dispatch = useDispatch();
-    // const { send } = useTransaction();
+    const { send } = useTransaction();
     const { sign } = useSignature({
         library: provider,
         connector,
@@ -82,10 +82,32 @@ export const useReferralViewModel = (props: IProps) => {
         toast(toastBody);
     }, []);
 
+    interface IClaimReferralRewardParams {
+        referralRewardIds: string[];
+        callbacks: { [key: string]: (errorMessage?: string) => void };
+    }
+
+    const claimReferralReward = useCallback(
+        async ({
+            referralRewardIds,
+            callbacks,
+        }: IClaimReferralRewardParams): Promise<void> => {
+            if (!address) return;
+            await claimReferralRewardsUsecase({
+                contract: insuranceContract,
+                referralRewardIds,
+                send,
+                callbacks,
+            });
+        },
+        [insuranceContract, send]
+    );
+
     return {
         initialize,
         getReferrerAddress,
         genarateReferralLink,
         copyReferralLink,
+        claimReferralReward,
     };
 };
