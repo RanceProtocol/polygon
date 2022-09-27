@@ -100,7 +100,7 @@ export const useReferralViewModel = (props: IProps) => {
                 callbacks,
             });
         },
-        [insuranceContract, send]
+        [insuranceContract, address, send]
     );
 
     return {

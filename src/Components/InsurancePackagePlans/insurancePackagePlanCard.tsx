@@ -11,6 +11,7 @@ import { referralState } from "../../modules/referral/infrastructure/redux/state
 
 interface IProp extends IInsurancePackagePlan {
     insurableCoins: string[];
+    hasInsured: boolean;
     onClickAction: (data: {
         open: boolean;
         planId: string;
@@ -28,6 +29,7 @@ const InsurancePackagePlanCard: FC<IProp> = (props) => {
         unsureFee,
         onClickAction,
         insurableCoins,
+        hasInsured,
     } = props;
     const { account } = useWeb3React();
     const { referrerAddress } = referralState();
@@ -73,7 +75,13 @@ const InsurancePackagePlanCard: FC<IProp> = (props) => {
                         onClickAction({
                             open: true,
                             planId,
-                            referrer: referrerAddress,
+                            referrer:
+                                !hasInsured &&
+                                !!referrerAddress &&
+                                referrerAddress.toLocaleLowerCase() !==
+                                    account.toLocaleLowerCase()
+                                    ? referrerAddress
+                                    : null,
                         })
                     }
                 >

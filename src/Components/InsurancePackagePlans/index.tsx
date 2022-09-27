@@ -31,7 +31,8 @@ const InsurancePackagePlans: FC<IProp> = () => {
 
     const state = insuranceState();
 
-    const { loadingPackagePlans, packagePlans, insurableCoins } = state;
+    const { loadingPackagePlans, packagePlans, insurableCoins, hasInsured } =
+        state;
 
     useEffect(() => {
         initializePackagePlans();
@@ -68,6 +69,7 @@ const InsurancePackagePlans: FC<IProp> = () => {
                                   key={insurancePackage.planId}
                                   {...insurancePackage}
                                   insurableCoins={insurableCoinsSymbols}
+                                  hasInsured={hasInsured as boolean}
                                   onClickAction={(data: {
                                       open: boolean;
                                       planId: string;
