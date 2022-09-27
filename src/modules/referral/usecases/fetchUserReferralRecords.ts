@@ -35,6 +35,8 @@ export const fetchUserReferralRecords = async (
 };
 
 const formatRewardDate = (timestamp: BigNumber): string => {
-    const dateArray = new Date(timestamp.toNumber() * 1000).toString();
+    const dateArray = new Date(timestamp.toNumber() * 1000)
+        .toString()
+        .split(" ");
     return `${dateArray[1]} ${dateArray[2]} ${dateArray[3]}`;
 };
