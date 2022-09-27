@@ -389,6 +389,7 @@ const PackagePurchaseModal: FC<IProps> = ({
             path: tradeDetails.path,
             insureCoin: insureCoinName,
             paymentToken: paymentTokenName,
+            referrer: referrer ?? undefined,
             callbacks,
         });
     };
