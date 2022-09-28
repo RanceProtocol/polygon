@@ -72,10 +72,7 @@ const Referral: NextPage = () => {
                             ) : (
                                 <NoCommisionsYet />
                             )}
-                            <ReferralsSummary
-                                referralCount={0}
-                                rewardBalances={["0 USDC", "0 USDT"]}
-                            />
+                            <ReferralsSummary referralRecord={referralRecord} />
                         </>
                     ) : (
                         loadingreferralLink === false && (
