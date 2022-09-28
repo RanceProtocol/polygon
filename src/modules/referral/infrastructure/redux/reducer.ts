@@ -1,11 +1,9 @@
-import { referralRecords } from "../../../../constants/dummyData";
-import { IReferralReward } from "../../domain/entities";
 import IReferralStore from "../../domain/interfaces/referralStore";
 import * as actionTypes from "./actionTypes";
 
 const initialState: IReferralStore = {
-    loadingReferralRecord: false,
-    loadingreferralLink: false,
+    loadingReferralRecord: undefined,
+    loadingreferralLink: undefined,
     referralRecord: [],
     referralLink: null,
     referrerAddress: null,
