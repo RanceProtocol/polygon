@@ -7,32 +7,33 @@ import {
     UsePaginationState,
     useTable,
     Column,
+    Hooks,
 } from "react-table";
-import { IReferralRecord, referralRecords } from "../../constants/dummyData";
+import { referralRecords } from "../../constants/dummyData";
 import {
     MdOutlineLastPage,
     MdOutlineFirstPage,
     MdNavigateNext,
     MdNavigateBefore,
 } from "react-icons/md";
+import { IReferralReward } from "../../modules/referral/domain/entities";
+import { BigNumber, utils } from "ethers";
+import clsx from "clsx";
+import { shortenAddress } from "../../utils/helpers";
 
-interface IProp {}
+interface IProp {
+    data: IReferralReward[];
+}
 
 export type TableInstanceWithHooks<T extends object> = TableInstance<T> &
     UsePaginationInstanceProps<T> & {
         state: UsePaginationState<T>;
     };
 
-const ReferralRecordTable: FC<IProp> = () => {
-    const data = useMemo(() => referralRecords, []);
-    const columns: Array<
-        Column<{
-            date: string;
-            address: string;
-            rewardAmount: string;
-            status: string;
-        }>
-    > = useMemo(
+const ReferralRecordTable: FC<IProp> = ({ data }) => {
+    // const data = useMemo(() => referralRecords, []);
+    const recordData = useMemo(() => (data ? data : []), [data]);
+    const columns: Array<Column<IReferralReward>> = useMemo(
         () => [
             {
                 Header: "DATE",
@@ -40,7 +41,7 @@ const ReferralRecordTable: FC<IProp> = () => {
             },
             {
                 Header: "ADDRESS",
-                accessor: "address",
+                accessor: "user",
             },
             {
                 Header: "REWARD",
@@ -48,11 +49,12 @@ const ReferralRecordTable: FC<IProp> = () => {
             },
             {
                 Header: "STATUS",
-                accessor: "status",
+                accessor: "claimed",
             },
         ],
         []
     );
+
     const {
         getTableProps,
         getTableBodyProps,
@@ -67,63 +69,146 @@ const ReferralRecordTable: FC<IProp> = () => {
         nextPage,
         previousPage,
         state: { pageIndex },
-    } = useTable({ columns, data }, usePagination) as TableInstanceWithHooks<{
-        date: string;
-        address: string;
-        rewardAmount: string;
-        status: string;
-    }>;
+    } = useTable(
+        { columns, data: recordData },
+        usePagination
+    ) as TableInstanceWithHooks<IReferralReward>;
 
     return (
         <div className={styles.root}>
-            <table {...getTableProps()} className={styles.table}>
-                <thead className={styles.table__head__container}>
-                    {headerGroups.map((headerGroup) => (
-                        // eslint-disable-next-line react/jsx-key
-                        <tr {...headerGroup.getHeaderGroupProps()}>
-                            {headerGroup.headers.map((col) => (
-                                // eslint-disable-next-line react/jsx-key
-                                <th
-                                    {...col.getHeaderProps()}
-                                    className={styles.table__head}
-                                >
-                                    {col.render("Header")}
-                                </th>
-                            ))}
-                        </tr>
-                    ))}
-                </thead>
-                <tbody
-                    {...getTableBodyProps()}
-                    className={styles.table__body__container}
-                >
-                    {page.map((row) => {
-                        prepareRow(row);
-
-                        return (
+            <div className={styles.table__container}>
+                <table {...getTableProps()} className={styles.table}>
+                    <thead className={styles.table__head__container}>
+                        {headerGroups.map((headerGroup) => (
                             // eslint-disable-next-line react/jsx-key
-                            <tr
-                                {...row.getRowProps()}
-                                className={styles.table__row}
-                            >
-                                {row.cells.map((cell) => (
+                            <tr {...headerGroup.getHeaderGroupProps()}>
+                                {headerGroup.headers.map((col) => (
                                     // eslint-disable-next-line react/jsx-key
-                                    <td
-                                        {...cell.getCellProps()}
-                                        className={styles.table__data}
+                                    <th
+                                        {...col.getHeaderProps()}
+                                        className={styles.table__head}
                                     >
-                                        {cell.render("Cell")}
-                                    </td>
+                                        {col.render("Header")}
+                                    </th>
                                 ))}
                             </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
+                        ))}
+                    </thead>
+                    <tbody
+                        {...getTableBodyProps()}
+                        className={styles.table__body__container}
+                    >
+                        {page.map((row) => {
+                            prepareRow(row);
+
+                            return (
+                                // eslint-disable-next-line react/jsx-key
+                                <tr
+                                    {...row.getRowProps()}
+                                    className={styles.table__row}
+                                >
+                                    {row.cells.map((cell) => {
+                                        if (cell.column.Header === "REWARD") {
+                                            return (
+                                                <td
+                                                    {...cell.getCellProps()}
+                                                    className={
+                                                        styles.table__data
+                                                    }
+                                                >{`${Number(
+                                                    utils.formatUnits(
+                                                        cell.row.original
+                                                            .rewardAmount,
+                                                        cell.row.original
+                                                            .rewardTokenDecimals
+                                                    )
+                                                ).toFixed(2)} ${
+                                                    cell.row.original
+                                                        .rewardTokenSymbol
+                                                }`}</td>
+                                            );
+                                        } else if (
+                                            cell.column.Header === "STATUS"
+                                        ) {
+                                            return (
+                                                <td
+                                                    {...cell.getCellProps()}
+                                                    className={clsx({
+                                                        [styles.table__data]:
+                                                            true,
+                                                        [styles.status__availble]:
+                                                            !cell.row.original
+                                                                .claimed,
+                                                        [styles.status__withdrawn]:
+                                                            cell.row.original
+                                                                .claimed,
+                                                    })}
+                                                >
+                                                    {cell.row.original
+                                                        .claimed ? (
+                                                        "Withdrawn"
+                                                    ) : (
+                                                        <div
+                                                            className={
+                                                                styles.status__cell
+                                                            }
+                                                        >
+                                                            <span
+                                                                className={
+                                                                    styles.status__availble
+                                                                }
+                                                            >
+                                                                Available
+                                                            </span>{" "}
+                                                            <button
+                                                                className={
+                                                                    styles.withdraw__btn
+                                                                }
+                                                            >
+                                                                Withdraw
+                                                            </button>
+                                                        </div>
+                                                    )}
+                                                </td>
+                                            );
+                                        } else if (
+                                            cell.column.Header === "ADDRESS"
+                                        ) {
+                                            return (
+                                                <td
+                                                    {...cell.getCellProps()}
+                                                    className={
+                                                        styles.table__data
+                                                    }
+                                                >
+                                                    {shortenAddress(
+                                                        cell.row.original.user
+                                                    )}
+                                                </td>
+                                            );
+                                        } else {
+                                            return (
+                                                <td
+                                                    {...cell.getCellProps()}
+                                                    className={
+                                                        styles.table__data
+                                                    }
+                                                >
+                                                    {cell.render("Cell")}
+                                                </td>
+                                            );
+                                        }
+                                    })}
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
+            </div>
             <div className={styles.pagination}>
                 <div className={styles.page__info}>
                     <span>
-                        Showing Page
+                        Showing Page{" "}
                         <span>
                             {pageIndex + 1} of {pageOptions.length}
                         </span>

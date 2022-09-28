@@ -1,5 +1,5 @@
 import { CallOverrides } from "ethers";
-import { Interface } from "@ethersproject/abi";
+import { Interface, JsonFragment } from "@ethersproject/abi";
 import { multicall2Address } from "../constants/addresses";
 import { Multicall2__factory } from "../typechain";
 
@@ -37,7 +37,7 @@ export const getMulticall = (provider: any) => {
         return res as any;
     };
     const multicall2 = async <T = any>(
-        abi: any[],
+        abi: JsonFragment[],
         calls: Call[],
         options?: MulticallOptions
     ): Promise<T> => {

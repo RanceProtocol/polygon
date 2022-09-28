@@ -1,6 +1,10 @@
 .root {
-    @apply w-full overflow-x-auto md:col-span-2 order-4
+    @apply w-full md:col-span-2 order-4
     md:order-3;
+}
+
+.table__container {
+    @apply w-full overflow-x-auto;
 }
 .table {
     @apply w-full
@@ -23,6 +27,20 @@
 }
 .table__data {
     @apply px-4 py-6 text-sm whitespace-nowrap;
+}
+
+.status__availble {
+    @apply text-theme-green;
+}
+
+.status__withdrawn {
+    @apply text-theme-white-alpha-6;
+}
+.status__cell {
+    @apply flex justify-between items-center;
+}
+.withdraw__btn {
+    @apply bg-theme-green text-theme-white ml-4 px-3 py-1 rounded;
 }
 
 .pagination {

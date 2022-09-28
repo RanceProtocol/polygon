@@ -61,7 +61,7 @@ const Referral: NextPage = () => {
                                 copyReferralLinkHandler={copyReferralLink}
                             />
                             {!!referralRecord.length ? (
-                                <ReferralRecordTable />
+                                <ReferralRecordTable data={referralRecord} />
                             ) : (
                                 <NoCommisionsYet />
                             )}

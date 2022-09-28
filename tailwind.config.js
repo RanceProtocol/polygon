@@ -23,6 +23,7 @@ module.exports = {
             "theme-white-alpha-3": "rgba(74, 74, 74, 0.07)",
             "theme-white-alpha-4": "rgba(255, 255, 255, 0.7)",
             "theme-white-alpha-5": "rgba(255, 255, 255, 0.13)",
+            "theme-white-alpha-6": "rgba(255, 255, 255, 0.4)",
             "theme-red-1": "#CE0F0F",
             "theme-red-2": "#C8304D",
             "theme-red-alpha": "rgba(206, 15, 15, 0.1)",
