@@ -1,3 +1,4 @@
+import { referralRecords } from "../../../../constants/dummyData";
 import { IReferralReward } from "../../domain/entities";
 import IReferralStore from "../../domain/interfaces/referralStore";
 import * as actionTypes from "./actionTypes";
@@ -44,6 +45,15 @@ export const referralReducer = (
             };
         case actionTypes.GET__REFERRAL__RECORD__FAILED:
             return { ...state, loadingReferralRecord: false };
+        case actionTypes.UPDATE__CLAIMED__REWARD:
+            const newReferralRecord = state.referralRecord.map((record) => {
+                if (record.id === payload.id)
+                    return { ...record, claimed: true };
+                return record;
+            });
+            console.log("newReferralRecord: ", newReferralRecord);
+
+            return { ...state, referralRecord: newReferralRecord };
         case actionTypes.GENERATING__REFERRAL__LINK:
             return { ...state, loadingreferralLink: true };
         case actionTypes.GENERATE__REFERRAL__LINK__SUCCESS:

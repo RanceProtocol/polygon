@@ -10,6 +10,7 @@ import {
     getReferralRecord as getReferralRecordAction,
     genarateReferralLink as genarateReferralLinkAction,
     getReferrerAddress as getReferrerAddressAction,
+    updateClaimedReward as updateClaimedRewardAction,
 } from "../infrastructure/redux/actions";
 import { copyReferralLink as copyReferralLinkUsecase } from "../usecases/copyReferralLink";
 import { claimReferralRewards as claimReferralRewardsUsecase } from "../usecases/claimReferralRewards";
@@ -19,6 +20,7 @@ import CustomToast, { STATUS, TYPE } from "../../../Components/CustomToast";
 import { toast } from "react-toastify";
 import useTransaction from "../../../hooks/useTransaction";
 import useSignature from "../../../hooks/useSignature";
+import { watchEvent } from "../../../utils/events";
 
 interface IProps {
     address: string | null | undefined;
@@ -102,6 +104,28 @@ export const useReferralViewModel = (props: IProps) => {
         },
         [insuranceContract, address, send]
     );
+
+    const updateClaimedReward = useCallback(
+        async (rewardId: string) => {
+            dispatch(updateClaimedRewardAction(rewardId));
+        },
+        [dispatch]
+    );
+
+    useEffect(() => {
+        watchEvent(
+            insuranceContract,
+            "RewardClaimed",
+            [address],
+            (user, referralId, amount, event) => {
+                updateClaimedReward(referralId);
+            }
+        );
+
+        return () => {
+            insuranceContract.removeAllListeners();
+        };
+    }, [insuranceContract, address, updateClaimedReward]);
 
     return {
         initialize,

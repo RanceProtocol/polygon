@@ -152,3 +152,10 @@ export const getReferralRecord =
             toast(toastBody);
         }
     };
+
+export const updateClaimedReward = (rewardId: string) => {
+    return {
+        type: actionTypes.UPDATE__CLAIMED__REWARD,
+        payload: { id: rewardId },
+    };
+};
