@@ -7,9 +7,7 @@ import {
     UsePaginationState,
     useTable,
     Column,
-    Hooks,
 } from "react-table";
-import { referralRecords } from "../../constants/dummyData";
 import {
     MdOutlineLastPage,
     MdOutlineFirstPage,
@@ -17,12 +15,18 @@ import {
     MdNavigateBefore,
 } from "react-icons/md";
 import { IReferralReward } from "../../modules/referral/domain/entities";
-import { BigNumber, utils } from "ethers";
+import { utils } from "ethers";
 import clsx from "clsx";
-import { shortenAddress } from "../../utils/helpers";
+import { shortenAddress, truncateString } from "../../utils/helpers";
+import CustomToast, { STATUS, TYPE } from "../CustomToast";
+import { toast } from "react-toastify";
 
 interface IProp {
     data: IReferralReward[];
+    claimReferralReward: ({
+        referralRewardIds,
+        callbacks,
+    }: any) => Promise<void>;
 }
 
 export type TableInstanceWithHooks<T extends object> = TableInstance<T> &
@@ -30,7 +34,7 @@ export type TableInstanceWithHooks<T extends object> = TableInstance<T> &
         state: UsePaginationState<T>;
     };
 
-const ReferralRecordTable: FC<IProp> = ({ data }) => {
+const ReferralRecordTable: FC<IProp> = ({ data, claimReferralReward }) => {
     // const data = useMemo(() => referralRecords, []);
     const recordData = useMemo(() => (data ? data : []), [data]);
     const columns: Array<Column<IReferralReward>> = useMemo(
@@ -73,6 +77,47 @@ const ReferralRecordTable: FC<IProp> = ({ data }) => {
         { columns, data: recordData },
         usePagination
     ) as TableInstanceWithHooks<IReferralReward>;
+
+    const handleWithdrawReward = async (referralRewardIds: string[]) => {
+        if (referralRewardIds.length === 0) return;
+
+        let pendingToastId: number | string = "";
+        const callbacks = {
+            sent: () => {
+                const toastBody = CustomToast({
+                    message: `Withdrawing referral reward`,
+                    status: STATUS.PENDING,
+                    type: TYPE.TRANSACTION,
+                });
+                pendingToastId = toast(toastBody, { autoClose: false });
+            },
+            successfull: async () => {
+                const toastBody = CustomToast({
+                    message: `Withdrawal reward successfully withdrawn`,
+                    status: STATUS.SUCCESSFULL,
+                    type: TYPE.TRANSACTION,
+                });
+                toast.dismiss(pendingToastId);
+                toast(toastBody);
+            },
+            failed: (errorMessage?: string) => {
+                const toastBody = CustomToast({
+                    message: errorMessage
+                        ? truncateString(errorMessage, 100)
+                        : "Referral reward withdrawal failed",
+                    status: STATUS.ERROR,
+                    type: TYPE.TRANSACTION,
+                });
+                toast.dismiss(pendingToastId);
+                toast(toastBody);
+            },
+        };
+
+        await claimReferralReward({
+            referralRewardIds,
+            callbacks,
+        });
+    };
 
     return (
         <div className={styles.root}>
@@ -163,6 +208,16 @@ const ReferralRecordTable: FC<IProp> = ({ data }) => {
                                                             <button
                                                                 className={
                                                                     styles.withdraw__btn
+                                                                }
+                                                                onClick={() =>
+                                                                    handleWithdrawReward(
+                                                                        [
+                                                                            cell
+                                                                                .row
+                                                                                .original
+                                                                                .id,
+                                                                        ]
+                                                                    )
                                                                 }
                                                             >
                                                                 Withdraw

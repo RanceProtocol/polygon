@@ -23,12 +23,16 @@ const Referral: NextPage = () => {
         referralLink,
     } = referralState();
 
-    const { initialize, genarateReferralLink, copyReferralLink } =
-        useReferralViewModel({
-            address: account,
-            provider: library,
-            connector,
-        });
+    const {
+        initialize,
+        genarateReferralLink,
+        copyReferralLink,
+        claimReferralReward,
+    } = useReferralViewModel({
+        address: account,
+        provider: library,
+        connector,
+    });
 
     useEffect(() => {
         (async () => {
@@ -61,7 +65,10 @@ const Referral: NextPage = () => {
                                 copyReferralLinkHandler={copyReferralLink}
                             />
                             {!!referralRecord.length ? (
-                                <ReferralRecordTable data={referralRecord} />
+                                <ReferralRecordTable
+                                    data={referralRecord}
+                                    claimReferralReward={claimReferralReward}
+                                />
                             ) : (
                                 <NoCommisionsYet />
                             )}
