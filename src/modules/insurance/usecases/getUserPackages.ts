@@ -34,11 +34,9 @@ export const getUserPackages = async (
                 structOutputToObject(item)
         );
 
-        const currentTimestamp = await getCurrentTimestamp();
-        if (!currentTimestamp) {
-            // if for some reason we can't get the current timeStamp (which is rare) theres no way to filter out packages that are still valid
-            throw new Error("something went wrong whlle getting packages");
-        }
+        const blockNumber = await contract.provider.getBlockNumber();
+        const { timestamp: currentTimestamp } =
+            await contract.provider.getBlock(blockNumber);
 
         const userPackages = formatedObject.map(
             (item: any, index: number): IInsurancePackage => {
