@@ -12,6 +12,9 @@ import { useWeb3React } from "@web3-react/core";
 import ReferralBanner from "../Components/ReferralBanner";
 import { useReferralViewModel } from "../modules/referral/controllers/referralController";
 import { referralState } from "../modules/referral/infrastructure/redux/state";
+import CustomToast, { STATUS, TYPE } from "../Components/CustomToast";
+import { toast } from "react-toastify";
+import { truncateString } from "../utils/helpers";
 
 const Referral: NextPage = () => {
     const { account, library, connector } = useWeb3React();
@@ -41,6 +44,55 @@ const Referral: NextPage = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [account]);
 
+    const claimReferralRewards = async (
+        referralRewardIds: string[]
+    ): Promise<void> => {
+        if (referralRewardIds.length === 0) return;
+
+        let pendingToastId: number | string = "";
+        const callbacks = {
+            sent: () => {
+                const toastBody = CustomToast({
+                    message:
+                        referralRewardIds.length > 0
+                            ? "Withdrawing all your referral rewards"
+                            : "Withdrawing your referral reward",
+                    status: STATUS.PENDING,
+                    type: TYPE.TRANSACTION,
+                });
+                pendingToastId = toast(toastBody, { autoClose: false });
+            },
+            successfull: async () => {
+                const toastBody = CustomToast({
+                    message:
+                        referralRewardIds.length > 0
+                            ? "Referral reward successfully withdrawn"
+                            : "`Referral rewards successfully withdrawn`",
+                    status: STATUS.SUCCESSFULL,
+                    type: TYPE.TRANSACTION,
+                });
+                toast.dismiss(pendingToastId);
+                toast(toastBody);
+            },
+            failed: (errorMessage?: string) => {
+                const toastBody = CustomToast({
+                    message: errorMessage
+                        ? truncateString(errorMessage, 100)
+                        : "Referral reward withdrawal failed",
+                    status: STATUS.ERROR,
+                    type: TYPE.TRANSACTION,
+                });
+                toast.dismiss(pendingToastId);
+                toast(toastBody);
+            },
+        };
+
+        await claimReferralReward({
+            referralRewardIds,
+            callbacks,
+        });
+    };
+
     return (
         <Fragment>
             <div className={styles.container}>
@@ -67,12 +119,15 @@ const Referral: NextPage = () => {
                             {!!referralRecord.length ? (
                                 <ReferralRecordTable
                                     data={referralRecord}
-                                    claimReferralReward={claimReferralReward}
+                                    claimReferralRewards={claimReferralRewards}
                                 />
                             ) : (
                                 <NoCommisionsYet />
                             )}
-                            <ReferralsSummary referralRecord={referralRecord} />
+                            <ReferralsSummary
+                                referralRecord={referralRecord}
+                                claimReferralRewards={claimReferralRewards}
+                            />
                         </>
                     ) : (
                         loadingreferralLink === false && (

@@ -19,17 +19,20 @@ export const referralReducer = (
     switch (type) {
         case actionTypes.GET__REFERRAL__LINK:
             return { ...state, loadingreferralLink: true };
+
         case actionTypes.GET__REFERRAL__LINK__SUCCESS:
             return {
                 ...state,
                 referralLink: payload.referralLink,
                 loadingreferralLink: false,
             };
+
         case actionTypes.GET__REFERRAL__LINK__FAILED:
             return {
                 ...state,
                 loadingreferralLink: false,
             };
+
         case actionTypes.SET__REFERRER__ADDRESS:
             return {
                 ...state,
@@ -37,6 +40,7 @@ export const referralReducer = (
             };
         case actionTypes.GET__REFERRAL__RECORD:
             return { ...state, loadingReferralRecord: true };
+
         case actionTypes.GET__REFERRAL__RECORD__SUCCESS:
             return {
                 ...state,
@@ -45,23 +49,25 @@ export const referralReducer = (
             };
         case actionTypes.GET__REFERRAL__RECORD__FAILED:
             return { ...state, loadingReferralRecord: false };
+
         case actionTypes.UPDATE__CLAIMED__REWARD:
             const newReferralRecord = state.referralRecord.map((record) => {
                 if (record.id === payload.id)
                     return { ...record, claimed: true };
                 return record;
             });
-            console.log("newReferralRecord: ", newReferralRecord);
-
             return { ...state, referralRecord: newReferralRecord };
+
         case actionTypes.GENERATING__REFERRAL__LINK:
             return { ...state, loadingreferralLink: true };
+
         case actionTypes.GENERATE__REFERRAL__LINK__SUCCESS:
             return {
                 ...state,
                 loadingreferralLink: false,
                 referralLink: payload.referralLink,
             };
+
         case actionTypes.GENERATE__REFERRAL__LINK__FAILED:
             return { ...state, loadingreferralLink: false };
 

@@ -29,20 +29,20 @@ const ReferralLink: FC<IProp> = ({ refLink, copyReferralLinkHandler }) => {
                 >
                     <AiOutlineLink />
                 </button>
-                <button className={styles.icon__btn}>
-                    <TwitterShareButton
-                        title="Stabilise coins on Rance Protocol at your desired price with up to 2 years Insurance protection by using this link"
-                        url={refLink}
-                        hashtags={[
-                            "DeFi",
-                            "crypto",
-                            "blockchain",
-                            "cryptocurrency",
-                        ]}
-                    >
-                        <AiOutlineTwitter />
-                    </TwitterShareButton>
-                </button>
+                <TwitterShareButton
+                    title="Stabilise coins on Rance Protocol at your desired price with up to 2 years Insurance protection by using this link"
+                    url={refLink}
+                    hashtags={[
+                        "DeFi",
+                        "crypto",
+                        "blockchain",
+                        "cryptocurrency",
+                    ]}
+                    resetButtonStyle={false}
+                    className={styles.icon__btn}
+                >
+                    <AiOutlineTwitter />
+                </TwitterShareButton>
                 <button className={styles.icon__btn}>
                     <FaDiscord />
                 </button>

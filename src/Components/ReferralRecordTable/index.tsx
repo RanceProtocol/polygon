@@ -17,16 +17,11 @@ import {
 import { IReferralReward } from "../../modules/referral/domain/entities";
 import { utils } from "ethers";
 import clsx from "clsx";
-import { shortenAddress, truncateString } from "../../utils/helpers";
-import CustomToast, { STATUS, TYPE } from "../CustomToast";
-import { toast } from "react-toastify";
+import { shortenAddress } from "../../utils/helpers";
 
 interface IProp {
     data: IReferralReward[];
-    claimReferralReward: ({
-        referralRewardIds,
-        callbacks,
-    }: any) => Promise<void>;
+    claimReferralRewards: (referralRewardIds: string[]) => Promise<void>;
 }
 
 export type TableInstanceWithHooks<T extends object> = TableInstance<T> &
@@ -34,7 +29,7 @@ export type TableInstanceWithHooks<T extends object> = TableInstance<T> &
         state: UsePaginationState<T>;
     };
 
-const ReferralRecordTable: FC<IProp> = ({ data, claimReferralReward }) => {
+const ReferralRecordTable: FC<IProp> = ({ data, claimReferralRewards }) => {
     // const data = useMemo(() => referralRecords, []);
     const recordData = useMemo(() => (data ? data : []), [data]);
     const columns: Array<Column<IReferralReward>> = useMemo(
@@ -77,47 +72,6 @@ const ReferralRecordTable: FC<IProp> = ({ data, claimReferralReward }) => {
         { columns, data: recordData },
         usePagination
     ) as TableInstanceWithHooks<IReferralReward>;
-
-    const handleWithdrawReward = async (referralRewardIds: string[]) => {
-        if (referralRewardIds.length === 0) return;
-
-        let pendingToastId: number | string = "";
-        const callbacks = {
-            sent: () => {
-                const toastBody = CustomToast({
-                    message: `Withdrawing referral reward`,
-                    status: STATUS.PENDING,
-                    type: TYPE.TRANSACTION,
-                });
-                pendingToastId = toast(toastBody, { autoClose: false });
-            },
-            successfull: async () => {
-                const toastBody = CustomToast({
-                    message: `Withdrawal reward successfully withdrawn`,
-                    status: STATUS.SUCCESSFULL,
-                    type: TYPE.TRANSACTION,
-                });
-                toast.dismiss(pendingToastId);
-                toast(toastBody);
-            },
-            failed: (errorMessage?: string) => {
-                const toastBody = CustomToast({
-                    message: errorMessage
-                        ? truncateString(errorMessage, 100)
-                        : "Referral reward withdrawal failed",
-                    status: STATUS.ERROR,
-                    type: TYPE.TRANSACTION,
-                });
-                toast.dismiss(pendingToastId);
-                toast(toastBody);
-            },
-        };
-
-        await claimReferralReward({
-            referralRewardIds,
-            callbacks,
-        });
-    };
 
     return (
         <div className={styles.root}>
@@ -210,7 +164,7 @@ const ReferralRecordTable: FC<IProp> = ({ data, claimReferralReward }) => {
                                                                     styles.withdraw__btn
                                                                 }
                                                                 onClick={() =>
-                                                                    handleWithdrawReward(
+                                                                    claimReferralRewards(
                                                                         [
                                                                             cell
                                                                                 .row

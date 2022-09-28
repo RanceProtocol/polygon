@@ -40,3 +40,9 @@
     px-3
     rounded-full;
 }
+
+.withdraw__btn:disabled {
+    @apply bg-theme-secondary-alpha-2
+    text-theme-white-alpha
+    cursor-not-allowed;
+}
