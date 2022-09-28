@@ -1,9 +1,9 @@
 import { FC } from "react";
 import styles from "./styles.module.css";
 import { AiOutlineLink, AiOutlineTwitter } from "react-icons/ai";
-import { FaDiscord } from "react-icons/fa";
+import { TbBrandTelegram } from "react-icons/tb";
 import clsx from "clsx";
-import { TwitterShareButton } from "react-share";
+import { TwitterShareButton, TelegramShareButton } from "react-share";
 
 interface IProp {
     refLink: string;
@@ -43,9 +43,14 @@ const ReferralLink: FC<IProp> = ({ refLink, copyReferralLinkHandler }) => {
                 >
                     <AiOutlineTwitter />
                 </TwitterShareButton>
-                <button className={styles.icon__btn}>
-                    <FaDiscord />
-                </button>
+                <TelegramShareButton
+                    title="Stabilise coins on Rance Protocol at your desired price with up to 2 years Insurance protection by using this link"
+                    url={refLink}
+                    resetButtonStyle={false}
+                    className={styles.icon__btn}
+                >
+                    <TbBrandTelegram />
+                </TelegramShareButton>
             </div>
         </div>
     );
