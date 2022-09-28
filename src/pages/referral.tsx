@@ -54,7 +54,7 @@ const Referral: NextPage = () => {
             sent: () => {
                 const toastBody = CustomToast({
                     message:
-                        referralRewardIds.length > 0
+                        referralRewardIds.length > 1
                             ? "Withdrawing all your referral rewards"
                             : "Withdrawing your referral reward",
                     status: STATUS.PENDING,
@@ -65,9 +65,9 @@ const Referral: NextPage = () => {
             successfull: async () => {
                 const toastBody = CustomToast({
                     message:
-                        referralRewardIds.length > 0
-                            ? "Referral reward successfully withdrawn"
-                            : "`Referral rewards successfully withdrawn`",
+                        referralRewardIds.length > 1
+                            ? "Referral rewards successfully withdrawn"
+                            : "Referral reward successfully withdrawn",
                     status: STATUS.SUCCESSFULL,
                     type: TYPE.TRANSACTION,
                 });
