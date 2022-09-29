@@ -94,7 +94,7 @@ const useWallet = () => {
             }
 
             try {
-                await activate(connector, () => {}, true);
+                await activate(connector);
                 const chainId = await connector.getChainId();
                 const provider = await connector.getProvider();
                 if (
