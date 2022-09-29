@@ -46,11 +46,8 @@ const useWallet = () => {
         const tryConnect = (connector: AbstractConnector) => {
             setTimeout(async () => {
                 try {
-                    alert(`trying to connect`);
                     await activate(connector, undefined, true);
-                    alert(`have tried connecting`);
                 } catch (error: any) {
-                    alert(`connection error: ${error?.message}`);
                     const errorMessage = getConnectionError(error);
                     const body = CustomToast({
                         message: errorMessage,
@@ -63,49 +60,34 @@ const useWallet = () => {
         };
 
         const previouslyConnectedWallet = window.localStorage.getItem("wallet");
-        alert(`previouslyConnectedWallet: , ${previouslyConnectedWallet}`);
-
         if (!!previouslyConnectedWallet) {
-            injected.isAuthorized().then(async (isAuthorized: boolean) => {
-                alert(`wallet is connected: ${isAuthorized}`);
+            if (
+                [
+                    walletStrings.metamask,
+                    walletStrings.trustwallet,
+                    walletStrings.safepal,
+                ].includes(previouslyConnectedWallet)
+            ) {
+                const isEthereumDefined = Reflect.has(window, "ethereum");
+                // handle opera lazy inject ethereum
+                if (!isEthereumDefined) {
+                    _ethereumListener().then(() => tryConnect(injected));
+                    return;
+                }
+                tryConnect(injected);
+            } else {
                 if (
-                    isAuthorized &&
-                    [
-                        walletStrings.metamask,
-                        walletStrings.trustwallet,
-                        walletStrings.safepal,
-                    ].includes(previouslyConnectedWallet)
+                    [walletStrings.bitkeep].includes(previouslyConnectedWallet)
                 ) {
-                    const isEthereumDefined = Reflect.has(window, "ethereum");
-                    // handle opera lazy inject ethereum
-                    if (!isEthereumDefined) {
-                        _ethereumListener().then(() => tryConnect(injected));
+                    const isBitkeepDefined = Reflect.has(window, "bitkeep");
+                    if (isBitkeepDefined) {
+                        tryConnect(bitKeep);
                         return;
                     }
-                    tryConnect(injected);
-                } else {
-                    bitKeep
-                        .isAuthorized()
-                        .then(async (isAuthorized: boolean) => {
-                            if (
-                                isAuthorized &&
-                                [walletStrings.bitkeep].includes(
-                                    previouslyConnectedWallet
-                                )
-                            ) {
-                                const isBitkeepDefined = Reflect.has(
-                                    window,
-                                    "bitkeep"
-                                );
-                                if (isBitkeepDefined) {
-                                    tryConnect(bitKeep);
-                                    return;
-                                }
-                            }
-                        });
                 }
-            });
+            }
         }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
