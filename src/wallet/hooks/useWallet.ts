@@ -46,8 +46,11 @@ const useWallet = () => {
         const tryConnect = (connector: AbstractConnector) => {
             setTimeout(async () => {
                 try {
+                    alert(`trying to connect`);
                     await activate(connector, undefined, true);
-                } catch (error) {
+                    alert(`have tried connecting`);
+                } catch (error: any) {
+                    alert(`connection error: ${error?.message}`);
                     const errorMessage = getConnectionError(error);
                     const body = CustomToast({
                         message: errorMessage,
@@ -60,9 +63,11 @@ const useWallet = () => {
         };
 
         const previouslyConnectedWallet = window.localStorage.getItem("wallet");
+        alert(`previouslyConnectedWallet: , ${previouslyConnectedWallet}`);
 
         if (!!previouslyConnectedWallet) {
             injected.isAuthorized().then(async (isAuthorized: boolean) => {
+                alert(`wallet is connected: ${isAuthorized}`);
                 if (
                     isAuthorized &&
                     [
