@@ -65,7 +65,7 @@ const useWallet = () => {
                         });
                 }
             });
-        }, 1000);
+        });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -158,6 +158,11 @@ const useWallet = () => {
     const disconnectWallet = () => {
         deactivate();
         window.localStorage.removeItem("wallet");
+        // This localStorage key is set by @web3-react/walletconnect-connector
+        if (window?.localStorage?.getItem("walletconnect")) {
+            walletConnect.close();
+            walletConnect.walletConnectProvider = null;
+        }
     };
 
     return { connectWallet, disconnectWallet };
