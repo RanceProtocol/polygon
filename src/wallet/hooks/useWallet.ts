@@ -15,57 +15,79 @@ import { walletStrings } from "../constants";
 const useWallet = () => {
     const { activate, deactivate } = useWeb3React();
 
+    const _ethereumListener = async () =>
+        new Promise<void>((resolve) =>
+            Object.defineProperty(window, "ethereum", {
+                get() {
+                    return this._eth;
+                },
+                set(_eth) {
+                    this._eth = _eth;
+
+                    resolve();
+                },
+            })
+        );
+
+    // const _bitKeepListener = async () =>
+    //     new Promise<void>((resolve) =>
+    //         Object.defineProperty(window, "bitkeep", {
+    //             get() {
+    //                 return this._bitkeep;
+    //             },
+    //             set(_bitkeep) {
+    //                 this._bitkeep = _bitkeep;
+    //                 resolve();
+    //             },
+    //         })
+    //     );
+
     useEffect(() => {
-        setTimeout(() => {
-            injected.isAuthorized().then(async (isAuthorized: boolean) => {
-                if (
-                    isAuthorized &&
-                    [
-                        walletStrings.metamask,
-                        walletStrings.trustwallet,
-                        walletStrings.safepal,
-                    ].includes(window.localStorage.getItem("wallet") as string)
-                ) {
-                    try {
-                        await activate(injected, undefined, true);
-                    } catch (error) {
-                        const errorMessage = getConnectionError(error);
-                        const body = CustomToast({
-                            message: errorMessage,
-                            status: STATUS.ERROR,
-                            type: TYPE.ERROR,
-                        });
-                        toast(body);
-                    }
-                } else {
-                    bitKeep
-                        .isAuthorized()
-                        .then(async (isAuthorized: boolean) => {
-                            if (
-                                isAuthorized &&
-                                [walletStrings.bitkeep].includes(
-                                    window.localStorage.getItem(
-                                        "wallet"
-                                    ) as string
-                                )
-                            ) {
-                                try {
-                                    await activate(bitKeep, undefined, true);
-                                } catch (error) {
-                                    const errorMessage =
-                                        getConnectionError(error);
-                                    const body = CustomToast({
-                                        message: errorMessage,
-                                        status: STATUS.ERROR,
-                                        type: TYPE.ERROR,
-                                    });
-                                    toast(body);
-                                }
-                            }
-                        });
+        const tryConnect = (connector: AbstractConnector) => {
+            setTimeout(async () => {
+                try {
+                    await activate(connector, undefined, true);
+                } catch (error: any) {
+                    const errorMessage = getConnectionError(error);
+                    const body = CustomToast({
+                        message: errorMessage,
+                        status: STATUS.ERROR,
+                        type: TYPE.ERROR,
+                    });
+                    toast(body);
                 }
             });
-        }, 1000);
+        };
+
+        const previouslyConnectedWallet = window.localStorage.getItem("wallet");
+        if (!!previouslyConnectedWallet) {
+            if (
+                [
+                    walletStrings.metamask,
+                    walletStrings.trustwallet,
+                    walletStrings.safepal,
+                ].includes(previouslyConnectedWallet)
+            ) {
+                const isEthereumDefined = Reflect.has(window, "ethereum");
+                // handle opera lazy inject ethereum
+                if (!isEthereumDefined) {
+                    _ethereumListener().then(() => tryConnect(injected));
+                    return;
+                }
+                tryConnect(injected);
+            } else {
+                if (
+                    [walletStrings.bitkeep].includes(previouslyConnectedWallet)
+                ) {
+                    const isBitkeepDefined = Reflect.has(window, "bitkeep");
+                    if (isBitkeepDefined) {
+                        tryConnect(bitKeep);
+                        return;
+                    }
+                }
+            }
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -158,6 +180,11 @@ const useWallet = () => {
     const disconnectWallet = () => {
         deactivate();
         window.localStorage.removeItem("wallet");
+        // This localStorage key is set by @web3-react/walletconnect-connector
+        if (window?.localStorage?.getItem("walletconnect")) {
+            walletConnect.close();
+            walletConnect.walletConnectProvider = null;
+        }
     };
 
     return { connectWallet, disconnectWallet };
