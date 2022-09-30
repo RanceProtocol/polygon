@@ -77,13 +77,17 @@ const useWallet = () => {
             }
         } else {
             if (isMobile && Reflect.has(window, "ethereum")) {
+                alert("never connected and is DAppBrowser");
+
                 // @ts-ignore
                 if (Boolean(window.ethereum?.isTrustWallet)) {
+                    console.log("the dapp broeser is trust wallet");
+
                     connectWallet(walletStrings.trustwallet);
                     // @ts-ignore
                 } else if (window.ethereum?.isSafePal) {
                     connectWallet(walletStrings.safepal);
-                }
+                } else connectWallet(walletStrings.metamask);
             } else if (isMobile && Reflect.has(window, "bitkeep")) {
                 connectWallet(walletStrings.bitkeep);
             }
