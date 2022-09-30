@@ -12,17 +12,9 @@ import { toast } from "react-toastify";
 import { getChainId } from "../../utils/helpers";
 import { walletLocalStorageKey, walletStrings } from "../constants";
 import { isMobile } from "react-device-detect";
-import {
-    NoEthereumProviderError,
-    UserRejectedRequestError as UserRejectedRequestErrorInjected,
-} from "@web3-react/injected-connector";
-import {
-    UserRejectedRequestError as UserRejectedRequestErrorWalletConnect,
-    WalletConnectConnector,
-} from "@web3-react/walletconnect-connector";
 
 const useWallet = () => {
-    const { activate, deactivate, setError } = useWeb3React();
+    const { activate, deactivate } = useWeb3React();
 
     const _ethereumListener = async () =>
         new Promise<void>((resolve) =>
@@ -123,52 +115,6 @@ const useWallet = () => {
                 default:
                     return;
             }
-            // window.localStorage.setItem(walletLocalStorageKey, walletName);
-
-            // activate(connector, async (error: Error) => {
-            //     if (error instanceof UnsupportedChainIdError) {
-            //         setError(error);
-            //         const provider = await connector.getProvider();
-            //         const hasSetup = await setupNetwork(provider);
-            //         if (hasSetup) {
-            //             activate(connector);
-            //         }
-            //     } else {
-            //         window?.localStorage?.removeItem(walletLocalStorageKey);
-            //         if (error instanceof NoEthereumProviderError) {
-            //             const body = CustomToast({
-            //                 message:
-            //                     "You are not on Ethereum enabled browser, Please use WalletConnect",
-            //                 status: STATUS.ERROR,
-            //                 type: TYPE.ERROR,
-            //             });
-            //             toast(body);
-            //         } else if (
-            //             error instanceof UserRejectedRequestErrorInjected ||
-            //             error instanceof UserRejectedRequestErrorWalletConnect
-            //         ) {
-            //             if (connector instanceof WalletConnectConnector) {
-            //                 const walletConnector =
-            //                     connector as WalletConnectConnector;
-            //                 walletConnector.walletConnectProvider = null;
-            //             }
-            //             const body = CustomToast({
-            //                 message:
-            //                     "Please authorize your wallet connection to this DApp",
-            //                 status: STATUS.ERROR,
-            //                 type: TYPE.ERROR,
-            //             });
-            //             toast(body);
-            //         } else {
-            //             const body = CustomToast({
-            //                 message: error.message,
-            //                 status: STATUS.ERROR,
-            //                 type: TYPE.ERROR,
-            //             });
-            //             toast(body);
-            //         }
-            //     }
-            // });
 
             try {
                 await activate(connector);
@@ -181,8 +127,11 @@ const useWallet = () => {
                     (name === "injected" || name === walletStrings.bitkeep)
                 ) {
                     try {
+                        alert("connected to a wrong network");
+
                         const hasSetup = await setupNetwork(provider);
                         if (hasSetup) {
+                            alert("has switched to the correct network");
                             activate(connector);
                         }
                     } catch (error: any) {
