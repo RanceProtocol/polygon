@@ -30,18 +30,18 @@ const useWallet = () => {
             })
         );
 
-    // const _bitKeepListener = async () =>
-    //     new Promise<void>((resolve) =>
-    //         Object.defineProperty(window, "bitkeep", {
-    //             get() {
-    //                 return this._bitkeep;
-    //             },
-    //             set(_bitkeep) {
-    //                 this._bitkeep = _bitkeep;
-    //                 resolve();
-    //             },
-    //         })
-    //     );
+    const _bitKeepListener = async () =>
+        new Promise<void>((resolve) =>
+            Object.defineProperty(window, "bitKeep", {
+                get() {
+                    return this._bitKeep;
+                },
+                set(_bitKeep) {
+                    this._bitKeep = _bitKeep;
+                    resolve();
+                },
+            })
+        );
 
     useEffect(() => {
         const previouslyConnectedWallet = window.localStorage.getItem(
@@ -56,7 +56,7 @@ const useWallet = () => {
                 ].includes(previouslyConnectedWallet)
             ) {
                 const isEthereumDefined = Reflect.has(window, "ethereum");
-                // handle opera lazy inject ethereum
+                // wait until it is injected
                 if (!isEthereumDefined) {
                     _ethereumListener().then(() =>
                         connectWallet(previouslyConnectedWallet)
@@ -69,10 +69,13 @@ const useWallet = () => {
                     [walletStrings.bitkeep].includes(previouslyConnectedWallet)
                 ) {
                     const isBitkeepDefined = Reflect.has(window, "bitkeep");
-                    if (isBitkeepDefined) {
-                        connectWallet(previouslyConnectedWallet);
+                    if (!isBitkeepDefined) {
+                        _bitKeepListener().then(() =>
+                            connectWallet(previouslyConnectedWallet)
+                        );
                         return;
                     }
+                    connectWallet(previouslyConnectedWallet);
                 }
             }
         } else {
@@ -83,9 +86,10 @@ const useWallet = () => {
                     // @ts-ignore
                 } else if (window.ethereum?.isSafePal) {
                     connectWallet(walletStrings.safepal);
+                    // @ts-ignore
+                } else if (window.ethereum.isBitKeep) {
+                    connectWallet(walletStrings.bitkeep);
                 } else connectWallet(walletStrings.metamask);
-            } else if (isMobile && Reflect.has(window, "bitkeep")) {
-                connectWallet(walletStrings.bitkeep);
             }
         }
 
