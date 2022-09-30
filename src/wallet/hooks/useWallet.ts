@@ -127,11 +127,8 @@ const useWallet = () => {
                     (name === "injected" || name === walletStrings.bitkeep)
                 ) {
                     try {
-                        alert("connected to a wrong network");
-
                         const hasSetup = await setupNetwork(provider);
                         if (hasSetup) {
-                            alert("has switched to the correct network");
                             activate(connector);
                         }
                     } catch (error: any) {
