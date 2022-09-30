@@ -11,7 +11,7 @@ import CustomToast, { STATUS, TYPE } from "../../Components/CustomToast";
 import { toast } from "react-toastify";
 import { getChainId } from "../../utils/helpers";
 import { walletLocalStorageKey, walletStrings } from "../constants";
-import { isMobile } from "react-device-detect";
+import { isMobile, isDesktop } from "react-device-detect";
 
 const useWallet = () => {
     const { activate, deactivate } = useWeb3React();
@@ -78,7 +78,7 @@ const useWallet = () => {
         } else {
             if (isMobile && Reflect.has(window, "ethereum")) {
                 // @ts-ignore
-                if (Boolean(window.ethereum?.isTrustWallet)) {
+                if (window.ethereum?.isTrustWallet) {
                     connectWallet(walletStrings.trustwallet);
                     // @ts-ignore
                 } else if (window.ethereum?.isSafePal) {
@@ -95,7 +95,7 @@ const useWallet = () => {
     const connectWallet = useCallback(
         async (name: string) => {
             let connector: AbstractConnector;
-            const walletName = name;
+            let walletName = name;
             const injectedWallets = [
                 walletStrings.metamask,
                 walletStrings.trustwallet,
@@ -114,6 +114,15 @@ const useWallet = () => {
                     break;
                 default:
                     return;
+            }
+            // when user clicks to connect with a DApp browser while on Desktop, use WC
+            if (
+                (walletName === walletStrings.trustwallet ||
+                    walletName === walletStrings.safepal) &&
+                isDesktop
+            ) {
+                connector = walletConnect;
+                walletName = walletStrings.walletconnect;
             }
 
             try {
