@@ -13,6 +13,7 @@ import {
     toggleAccountModal,
     toggleWalletModal,
 } from "../../appState/shared/action";
+import { walletLocalStorageKey } from "../../wallet/constants";
 
 interface IProp {}
 
@@ -79,7 +80,7 @@ const Header: FC<IProp> = () => {
             </nav>
             {active ? (
                 <div className={styles.connected}>
-                    {window.localStorage.getItem("wallet") && (
+                    {window.localStorage.getItem(walletLocalStorageKey) && (
                         <div className={styles.connected__wallet}>
                             <div className={styles.connected__wallet__icon}>
                                 <Image

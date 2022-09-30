@@ -1,16 +1,17 @@
 import { AbstractConnector } from "@web3-react/abstract-connector";
 import { bitKeep, injected, walletConnect } from "../connnectors";
-import { useWeb3React } from "@web3-react/core";
+import { UnsupportedChainIdError, useWeb3React } from "@web3-react/core";
 import {
     getSupportedChainsName,
     supportedChainIds,
 } from "../../constants/chainIds";
-import { addNetwork, getConnectionError } from "../utils";
+import { setupNetwork, getConnectionError } from "../utils";
 import { useCallback, useEffect } from "react";
 import CustomToast, { STATUS, TYPE } from "../../Components/CustomToast";
 import { toast } from "react-toastify";
 import { getChainId } from "../../utils/helpers";
-import { walletStrings } from "../constants";
+import { walletLocalStorageKey, walletStrings } from "../constants";
+import { isMobile, isDesktop } from "react-device-detect";
 
 const useWallet = () => {
     const { activate, deactivate } = useWeb3React();
@@ -43,23 +44,9 @@ const useWallet = () => {
     //     );
 
     useEffect(() => {
-        const tryConnect = (connector: AbstractConnector) => {
-            setTimeout(async () => {
-                try {
-                    await activate(connector, undefined, true);
-                } catch (error: any) {
-                    const errorMessage = getConnectionError(error);
-                    const body = CustomToast({
-                        message: errorMessage,
-                        status: STATUS.ERROR,
-                        type: TYPE.ERROR,
-                    });
-                    toast(body);
-                }
-            });
-        };
-
-        const previouslyConnectedWallet = window.localStorage.getItem("wallet");
+        const previouslyConnectedWallet = window.localStorage.getItem(
+            walletLocalStorageKey
+        );
         if (!!previouslyConnectedWallet) {
             if (
                 [
@@ -71,20 +58,34 @@ const useWallet = () => {
                 const isEthereumDefined = Reflect.has(window, "ethereum");
                 // handle opera lazy inject ethereum
                 if (!isEthereumDefined) {
-                    _ethereumListener().then(() => tryConnect(injected));
+                    _ethereumListener().then(() =>
+                        connectWallet(previouslyConnectedWallet)
+                    );
                     return;
                 }
-                tryConnect(injected);
+                connectWallet(previouslyConnectedWallet);
             } else {
                 if (
                     [walletStrings.bitkeep].includes(previouslyConnectedWallet)
                 ) {
                     const isBitkeepDefined = Reflect.has(window, "bitkeep");
                     if (isBitkeepDefined) {
-                        tryConnect(bitKeep);
+                        connectWallet(previouslyConnectedWallet);
                         return;
                     }
                 }
+            }
+        } else {
+            if (isMobile && Reflect.has(window, "ethereum")) {
+                // @ts-ignore
+                if (window.ethereum?.isTrustWallet) {
+                    connectWallet(walletStrings.trustwallet);
+                    // @ts-ignore
+                } else if (window.ethereum?.isSafePal) {
+                    connectWallet(walletStrings.safepal);
+                } else connectWallet(walletStrings.metamask);
+            } else if (isMobile && Reflect.has(window, "bitkeep")) {
+                connectWallet(walletStrings.bitkeep);
             }
         }
 
@@ -94,7 +95,7 @@ const useWallet = () => {
     const connectWallet = useCallback(
         async (name: string) => {
             let connector: AbstractConnector;
-            const walletName = name;
+            let walletName = name;
             const injectedWallets = [
                 walletStrings.metamask,
                 walletStrings.trustwallet,
@@ -114,6 +115,15 @@ const useWallet = () => {
                 default:
                     return;
             }
+            // when user clicks to connect with a DApp browser while on Desktop, use WC
+            if (
+                (walletName === walletStrings.trustwallet ||
+                    walletName === walletStrings.safepal) &&
+                isDesktop
+            ) {
+                connector = walletConnect;
+                walletName = walletStrings.walletconnect;
+            }
 
             try {
                 await activate(connector);
@@ -126,7 +136,10 @@ const useWallet = () => {
                     (name === "injected" || name === walletStrings.bitkeep)
                 ) {
                     try {
-                        await addNetwork(provider);
+                        const hasSetup = await setupNetwork(provider);
+                        if (hasSetup) {
+                            activate(connector);
+                        }
                     } catch (error: any) {
                         const body = CustomToast({
                             message: error?.message,
@@ -147,7 +160,7 @@ const useWallet = () => {
                     });
                     toast(body);
                 }
-                window.localStorage.setItem("wallet", walletName);
+                window.localStorage.setItem(walletLocalStorageKey, walletName);
             } catch (error: any) {
                 console.error(error);
                 let body;
@@ -179,7 +192,7 @@ const useWallet = () => {
 
     const disconnectWallet = () => {
         deactivate();
-        window.localStorage.removeItem("wallet");
+        window.localStorage.removeItem(walletLocalStorageKey);
         // This localStorage key is set by @web3-react/walletconnect-connector
         if (window?.localStorage?.getItem("walletconnect")) {
             walletConnect.close();
