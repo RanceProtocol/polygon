@@ -1,20 +1,28 @@
 import { AbstractConnector } from "@web3-react/abstract-connector";
 import { bitKeep, injected, walletConnect } from "../connnectors";
-import { useWeb3React } from "@web3-react/core";
+import { UnsupportedChainIdError, useWeb3React } from "@web3-react/core";
 import {
     getSupportedChainsName,
     supportedChainIds,
 } from "../../constants/chainIds";
-import { addNetwork, getConnectionError } from "../utils";
+import { setupNetwork, getConnectionError } from "../utils";
 import { useCallback, useEffect } from "react";
 import CustomToast, { STATUS, TYPE } from "../../Components/CustomToast";
 import { toast } from "react-toastify";
 import { getChainId } from "../../utils/helpers";
 import { walletLocalStorageKey, walletStrings } from "../constants";
 import { isMobile } from "react-device-detect";
+import {
+    NoEthereumProviderError,
+    UserRejectedRequestError as UserRejectedRequestErrorInjected,
+} from "@web3-react/injected-connector";
+import {
+    UserRejectedRequestError as UserRejectedRequestErrorWalletConnect,
+    WalletConnectConnector,
+} from "@web3-react/walletconnect-connector";
 
 const useWallet = () => {
-    const { activate, deactivate } = useWeb3React();
+    const { activate, deactivate, setError } = useWeb3React();
 
     const _ethereumListener = async () =>
         new Promise<void>((resolve) =>
@@ -97,7 +105,7 @@ const useWallet = () => {
     }, []);
 
     const connectWallet = useCallback(
-        async (name: string) => {
+        (name: string) => {
             let connector: AbstractConnector;
             const walletName = name;
             const injectedWallets = [
@@ -119,65 +127,111 @@ const useWallet = () => {
                 default:
                     return;
             }
+            window.localStorage.setItem(walletLocalStorageKey, walletName);
 
-            try {
-                await activate(connector);
-                const chainId = await connector.getChainId();
-                const provider = await connector.getProvider();
-                if (
-                    !Object.values(supportedChainIds).includes(
-                        Number(chainId)
-                    ) &&
-                    (name === "injected" || name === walletStrings.bitkeep)
-                ) {
-                    try {
-                        await addNetwork(provider);
-                    } catch (error: any) {
+            activate(connector, async (error: Error) => {
+                if (error instanceof UnsupportedChainIdError) {
+                    setError(error);
+                    const provider = await connector.getProvider();
+                    const hasSetup = await setupNetwork(provider);
+                    if (hasSetup) {
+                        activate(connector);
+                    }
+                } else {
+                    window?.localStorage?.removeItem(walletLocalStorageKey);
+                    if (error instanceof NoEthereumProviderError) {
                         const body = CustomToast({
-                            message: error?.message,
+                            message:
+                                "You are not on Ethereum enabled browser, Please use WalletConnect",
+                            status: STATUS.ERROR,
+                            type: TYPE.ERROR,
+                        });
+                        toast(body);
+                    } else if (
+                        error instanceof UserRejectedRequestErrorInjected ||
+                        error instanceof UserRejectedRequestErrorWalletConnect
+                    ) {
+                        if (connector instanceof WalletConnectConnector) {
+                            const walletConnector =
+                                connector as WalletConnectConnector;
+                            walletConnector.walletConnectProvider = null;
+                        }
+                        const body = CustomToast({
+                            message:
+                                "Please authorize your wallet connection to this DApp",
+                            status: STATUS.ERROR,
+                            type: TYPE.ERROR,
+                        });
+                        toast(body);
+                    } else {
+                        const body = CustomToast({
+                            message: error.message,
                             status: STATUS.ERROR,
                             type: TYPE.ERROR,
                         });
                         toast(body);
                     }
-                } else if (
-                    !Object.values(supportedChainIds).includes(Number(chainId))
-                ) {
-                    const body = CustomToast({
-                        message: `Unsupported network detected! please switch to ${getSupportedChainsName(
-                            getChainId()
-                        )}`,
-                        status: STATUS.ERROR,
-                        type: TYPE.ERROR,
-                    });
-                    toast(body);
                 }
-                window.localStorage.setItem(walletLocalStorageKey, walletName);
-            } catch (error: any) {
-                console.error(error);
-                let body;
-                if (error.code === -32002) {
-                    body = CustomToast({
-                        message: "You have a pending connection request",
-                        status: STATUS.ERROR,
-                        type: TYPE.ERROR,
-                    });
-                } else if (error.name === "NoEthereumProviderError") {
-                    body = CustomToast({
-                        message:
-                            "You are not on Ethereum enabled browser, Please use WalletConnect",
-                        status: STATUS.ERROR,
-                        type: TYPE.ERROR,
-                    });
-                } else {
-                    body = CustomToast({
-                        message: error.message,
-                        status: STATUS.ERROR,
-                        type: TYPE.ERROR,
-                    });
-                }
-                toast(body);
-            }
+            });
+
+            // try {
+            //     await activate(connector);
+            //     const chainId = await connector.getChainId();
+            //     const provider = await connector.getProvider();
+            //     if (
+            //         !Object.values(supportedChainIds).includes(
+            //             Number(chainId)
+            //         ) &&
+            //         (name === "injected" || name === walletStrings.bitkeep)
+            //     ) {
+            //         try {
+            //             await addNetwork(provider);
+            //         } catch (error: any) {
+            //             const body = CustomToast({
+            //                 message: error?.message,
+            //                 status: STATUS.ERROR,
+            //                 type: TYPE.ERROR,
+            //             });
+            //             toast(body);
+            //         }
+            //     } else if (
+            //         !Object.values(supportedChainIds).includes(Number(chainId))
+            //     ) {
+            //         const body = CustomToast({
+            //             message: `Unsupported network detected! please switch to ${getSupportedChainsName(
+            //                 getChainId()
+            //             )}`,
+            //             status: STATUS.ERROR,
+            //             type: TYPE.ERROR,
+            //         });
+            //         toast(body);
+            //     }
+            //     window.localStorage.setItem(walletLocalStorageKey, walletName);
+            // } catch (error: any) {
+            //     console.error(error);
+            //     let body;
+            //     if (error.code === -32002) {
+            //         body = CustomToast({
+            //             message: "You have a pending connection request",
+            //             status: STATUS.ERROR,
+            //             type: TYPE.ERROR,
+            //         });
+            //     } else if (error.name === "NoEthereumProviderError") {
+            // body = CustomToast({
+            //     message:
+            //         "You are not on Ethereum enabled browser, Please use WalletConnect",
+            //     status: STATUS.ERROR,
+            //     type: TYPE.ERROR,
+            // });
+            //     } else {
+            //         body = CustomToast({
+            //             message: error.message,
+            //             status: STATUS.ERROR,
+            //             type: TYPE.ERROR,
+            //         });
+            // }
+            //     toast(body);
+            // }
         },
         [activate]
     );
