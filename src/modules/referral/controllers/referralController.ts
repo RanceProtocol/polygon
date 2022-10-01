@@ -64,7 +64,7 @@ export const useReferralViewModel = (props: IProps) => {
     const genarateReferralLink = useCallback(async (): Promise<void> => {
         if (!address) return;
 
-        const message = `Welcome to RanceProtocol!\n\nClick to sign and generate a referral code with which you can earn reward\n\nThis request will not trigger a blockchain transaction or cost any gas fees.\n\nWallet address:\n${address}`;
+        const message = `Welcome to RanceProtocol!\n\nClick to sign and generate a referral link with which you can earn reward\n\nThis request will not trigger a blockchain transaction or cost any gas fees.\n\nWallet address:\n${address}`;
         await genarateReferralLinkAction(
             address,
             message,
