@@ -15,6 +15,9 @@ import { referralState } from "../modules/referral/infrastructure/redux/state";
 import CustomToast, { STATUS, TYPE } from "../Components/CustomToast";
 import { toast } from "react-toastify";
 import { truncateString } from "../utils/helpers";
+import Loading from "../Components/SharedComponent/Loading";
+import Reactionloader from "../Components/SharedComponent/Reactionloader";
+import clsx from "clsx";
 
 const Referral: NextPage = () => {
     const { account, library, connector } = useWeb3React();
@@ -109,6 +112,14 @@ const Referral: NextPage = () => {
                                 <p>Please connect your wallet</p>
                             </div>
                         </>
+                    ) : loadingreferralLink ? (
+                        <>
+                            <ReferralBanner />
+                            <div></div>
+                            <div className={styles.loading__icon__container}>
+                                <Reactionloader />
+                            </div>
+                        </>
                     ) : referralLink ? (
                         <>
                             <ReferralBanner />
@@ -116,7 +127,16 @@ const Referral: NextPage = () => {
                                 refLink={referralLink}
                                 copyReferralLinkHandler={copyReferralLink}
                             />
-                            {!!referralRecord.length ? (
+                            {loadingReferralRecord ? (
+                                <div
+                                    className={clsx(
+                                        styles.loading__icon__container,
+                                        styles.record__table__loader
+                                    )}
+                                >
+                                    <Reactionloader />
+                                </div>
+                            ) : !!referralRecord.length ? (
                                 <ReferralRecordTable
                                     data={referralRecord}
                                     claimReferralRewards={claimReferralRewards}
@@ -130,16 +150,14 @@ const Referral: NextPage = () => {
                             />
                         </>
                     ) : (
-                        loadingreferralLink === false && (
-                            <>
-                                <ReferralBanner />
-                                {/* this div is a workaround so that the component below to be the third grid iten */}
-                                <div></div>
-                                <GenerateReferralLink
-                                    generateLinkHandler={genarateReferralLink}
-                                />
-                            </>
-                        )
+                        <>
+                            <ReferralBanner />
+                            {/* this div is a workaround so that the component below to be the third grid iten */}
+                            <div></div>
+                            <GenerateReferralLink
+                                generateLinkHandler={genarateReferralLink}
+                            />
+                        </>
                     )}
                 </main>
             </div>
