@@ -17,3 +17,12 @@
     text-theme-white-alpha
     text-sm;
 }
+
+.loading__icon__container {
+    @apply md:col-span-2 w-full h-full flex justify-center items-center;
+}
+
+.record__table__loader {
+    @apply order-4
+    md:order-3;
+}
