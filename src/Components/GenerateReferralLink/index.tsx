@@ -18,7 +18,7 @@ const GenerateReferralLink: FC<IProp> = ({ generateLinkHandler }) => {
                 />
             </div>
             <p className={styles.no__ref__code__text}>
-                You do not have a referral code yet. Generate one to start
+                You do not have a referral link yet. Generate one to start
                 earning commissions on referrals
             </p>
             <button
