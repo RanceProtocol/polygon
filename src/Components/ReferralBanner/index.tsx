@@ -10,7 +10,7 @@ const ReferralBanner = () => {
                 <p className={styles.banner__text}>
                     When your direct referrals buy an insurance package, you are
                     given 5% of the worth of coins they buy as commission which
-                    you can claim from this tab.
+                    you can claim from this tab
                 </p>
             </div>
             <div className={styles.banner__image__container}>
