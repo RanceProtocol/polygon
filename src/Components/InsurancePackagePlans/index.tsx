@@ -1,15 +1,16 @@
-import { FC, Fragment, useEffect, useState } from "react";
+import { FC, Fragment, useEffect, useMemo, useState } from "react";
 import styles from "./styles.module.css";
 import InsurancePackagePlanCard from "./insurancePackagePlanCard";
 import InsurancePackagePlanCardSkeleton from "./insurancePackagePlanCardSkeleton";
 import PackagePurchaseModal from "../PackagePurchaseModal";
 import { useWeb3React } from "@web3-react/core";
 import { useInsuranceViewModel } from "../../modules/insurance/controllers/insuranceViewModel";
+import { insuranceState } from "../../modules/insurance/infrastructure/redux/state";
 import { IInsurancePackagePlan } from "../../modules/insurance/domain/entities";
 import SuccessModal from "../SuccessModal";
 import { useRouter } from "next/router";
 import { insurancePageTabs } from "../../constants/routes";
-import { insuranceState } from "../../modules/insurance/infrastructure/redux/state";
+import { usePlenaWallet } from "plena-wallet-sdk";
 
 interface IProp {}
 
@@ -23,6 +24,15 @@ const InsurancePackagePlans: FC<IProp> = () => {
     const router = useRouter();
 
     const { account, library } = useWeb3React();
+    const { walletAddress: plenaWalletAddress } = usePlenaWallet();
+
+    const connectedAddress = useMemo(() => {
+        if (account) {
+            return account;
+        } else if (plenaWalletAddress) {
+            return plenaWalletAddress;
+        } else return undefined;
+    }, [account, plenaWalletAddress]);
 
     const { initializePackagePlans } = useInsuranceViewModel({
         address: account,
@@ -79,7 +89,7 @@ const InsurancePackagePlans: FC<IProp> = () => {
                           )
                       )}
             </div>
-            {account && (
+            {connectedAddress && (
                 <PackagePurchaseModal
                     state={packagePurchaseModal}
                     onClose={() =>
