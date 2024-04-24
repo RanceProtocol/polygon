@@ -5,7 +5,6 @@ import { structOutputToObject } from "../../../utils/helpers";
 import { getCurrentTimestamp } from "../../../utils/time";
 import { IInsurancePackage } from "../domain/entities";
 import IInsuranceStore from "../domain/insuranceStore";
-
 export const getUserPackages = async (
     contract: RanceProtocol,
     userAddress: string | null | undefined
@@ -16,6 +15,7 @@ export const getUserPackages = async (
         const packagesLength = await contract.getUserPackagesLength(
             userAddress
         );
+
         const packages: IRanceProtocol.PackageStructOutput[] =
             await contract.getAllUserPackages(userAddress, 0, packagesLength);
 
@@ -34,15 +34,12 @@ export const getUserPackages = async (
                 structOutputToObject(item)
         );
 
-        const blockNumber = await contract.provider.getBlockNumber();
         const { timestamp: currentTimestamp } =
-            await contract.provider.getBlock(blockNumber);
-
+            await contract.provider.getBlock("latest");
         const userPackages = formatedObject.map(
             (item: any, index: number): IInsurancePackage => {
                 return {
                     ...item,
-                    // endTimestamp: currentTimestamp,
                     packagePlanName: getDurationData(
                         packagesPlansData[index].periodInSeconds
                     ).name,

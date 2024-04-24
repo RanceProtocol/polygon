@@ -36,10 +36,13 @@ export const getPackagePlans = async (
         // console.log("rrrrrrr: ", res);
 
         const insureCoinLength = await contract.getInsureCoinsLength();
+
         const insurableCoinsNames: string[] = await contract.getInsureCoins(
             0,
             insureCoinLength
         );
+
+        console.log("insurableCoinsNames: ", insurableCoinsNames);
 
         let insurableCoinsEntries: string[][] = await Promise.all(
             insurableCoinsNames.map(async (name) => [
@@ -70,13 +73,15 @@ export const getPackagePlans = async (
 
         const paymentTokensObject = Object.fromEntries(paymentTokensEntries);
 
+        console.log("paymentTokensObject: ", paymentTokensObject);
+
         return {
             insurableCoins: insurableCoinsObject,
             paymentTokens: paymentTokensObject,
             packagePlans: packagePlansCompleteData,
         };
     } catch (error: any) {
-        console.log(error);
+        console.log("ski", error);
         throw new Error(error);
     }
 };

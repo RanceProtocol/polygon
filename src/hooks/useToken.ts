@@ -3,9 +3,9 @@ import { BigNumber } from "ethers";
 import { useEffect, useMemo, useState } from "react";
 import { Erc20__factory } from "../typechain";
 import { watchEvent } from "../utils/events";
-import { getDefaultProvider } from "../wallet/utils";
 import useTransaction from "./useTransaction";
 import { usePlenaWallet } from "plena-wallet-sdk";
+import { resilientJsonRpcProvider } from "../constants/provider";
 
 const useToken = (address: string) => {
     const { library, account } = useWeb3React();
@@ -27,7 +27,7 @@ const useToken = (address: string) => {
 
     const contract = Erc20__factory.connect(
         address,
-        library?.getSigner() || getDefaultProvider()
+        library?.getSigner() || resilientJsonRpcProvider
     );
     const { send } = useTransaction();
 
@@ -103,8 +103,11 @@ const useToken = (address: string) => {
     useEffect(() => {
         if (!contract) return;
         (async () => {
-            await getDecimals();
-            getBalance();
+            try {
+                await Promise.all([getDecimals(), getBalance()]);
+            } catch (error) {
+                console.error(error);
+            }
         })();
 
         //events
@@ -112,24 +115,36 @@ const useToken = (address: string) => {
             contract,
             "Transfer",
             [connectedAddress],
-            (from, to, value, event) => {
-                getBalance();
+            async (from, to, value, event) => {
+                try {
+                    await getBalance();
+                } catch (error) {
+                    console.error(error);
+                }
             }
         );
         watchEvent(
             contract,
             "Approval",
             [connectedAddress],
-            (owner, spender, value, event) => {
-                getAllowance(spender);
+            async (owner, spender, value, event) => {
+                try {
+                    await getAllowance(spender);
+                } catch (error) {
+                    console.error(error);
+                }
             }
         );
         watchEvent(
             contract,
             "Transfer",
             [null, account],
-            (from, to, value, event) => {
-                getBalance();
+            async (from, to, value, event) => {
+                try {
+                    await getBalance();
+                } catch (error) {
+                    console.error(error);
+                }
             }
         );
 

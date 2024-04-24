@@ -1,44 +1,62 @@
-import { Web3Provider } from "@ethersproject/providers";
 import { BigNumber } from "ethers";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { ranceProtocol } from "../../../constants/addresses";
 import { RanceProtocol__factory } from "../../../typechain";
-import { getDefaultProvider } from "../../../wallet/utils";
 import {
     initializePackagePlans as initializePackagePlansAction,
     intializeUserPackages as intializeUserPackagesAction,
     removeUserPackage as removeUserPackageAction,
 } from "../infrastructure/redux/actions";
-import { insure as insureUseCase } from "../usecases/insure";
-import { cancelInsurance as cancelInsuranceUseCase } from "../usecases/cancelInsurance";
-import { withdrawInsurance as withdrawInsuranceUseCase } from "../usecases/withdrawInsurance";
+import {
+    insureWithEIP1193 as insureWithEIP1193UseCase,
+    insureWithPlena as insureWithPlenaUseCase,
+} from "../usecases/insure";
+import {
+    cancelInsurance as cancelInsuranceUseCase,
+    cancelInsuranceWithPlena as cancelInsuranceWithPlenaUseCase,
+} from "../usecases/cancelInsurance";
+import {
+    withdrawInsurance as withdrawInsuranceUseCase,
+    withdrawInsuranceWithPlena as withdrawInsuranceWithPlenaUseCase,
+} from "../usecases/withdrawInsurance";
 import { watchEvent } from "../../../utils/events";
 import useTransaction from "../../../hooks/useTransaction";
-
-interface IProps {
-    address: string | null | undefined;
-    provider: Web3Provider | undefined;
-}
+import { useWeb3React } from "@web3-react/core";
+import { usePlenaWallet } from "plena-wallet-sdk";
+import { resilientJsonRpcProvider } from "../../../constants/provider";
 
 type addressType = keyof typeof ranceProtocol;
 const dappEnv: addressType = process.env
     .NEXT_PUBLIC_DAPP_ENVIRONMENT as addressType;
 
-export const useInsuranceViewModel = (props: IProps) => {
-    const { address, provider } = props;
+export const useInsuranceViewModel = () => {
+    const { account, library: provider } = useWeb3React();
+
+    const {
+        walletAddress: plenaWalletAddress,
+        sendTransaction: sendTransactionWithPlena,
+    } = usePlenaWallet();
+
+    const address = useMemo(() => {
+        if (account) {
+            return account;
+        } else if (plenaWalletAddress) {
+            return plenaWalletAddress;
+        } else return undefined;
+    }, [account, plenaWalletAddress]);
     const dispatch = useDispatch();
     const { send } = useTransaction();
 
     const insuranceContract = RanceProtocol__factory.connect(
         ranceProtocol[dappEnv],
-        provider?.getSigner() || getDefaultProvider()
+        provider?.getSigner() || resilientJsonRpcProvider
     );
 
     const initializePackagePlans = useCallback(async (): Promise<void> => {
         const insuranceContract = RanceProtocol__factory.connect(
             ranceProtocol[dappEnv],
-            provider?.getSigner() || getDefaultProvider()
+            provider?.getSigner() || resilientJsonRpcProvider
         );
         await initializePackagePlansAction(insuranceContract)(dispatch);
     }, [provider, dispatch]);
@@ -46,7 +64,7 @@ export const useInsuranceViewModel = (props: IProps) => {
     const intializeUserPackages = useCallback(async (): Promise<void> => {
         const insuranceContract = RanceProtocol__factory.connect(
             ranceProtocol[dappEnv],
-            provider?.getSigner() || getDefaultProvider()
+            provider?.getSigner() || resilientJsonRpcProvider
         );
         await intializeUserPackagesAction(insuranceContract, address)(dispatch);
     }, [address, provider, dispatch]);
@@ -78,36 +96,76 @@ export const useInsuranceViewModel = (props: IProps) => {
             referrer,
             callbacks,
         }: IinsureParams): Promise<void> => {
-            await insureUseCase({
-                contract: insuranceContract,
-                planId,
-                amount,
-                path,
-                insureCoin,
-                paymentToken,
-                referrer,
-                send,
-                callbacks,
-            });
+            if (plenaWalletAddress) {
+                await insureWithPlenaUseCase({
+                    contractAddress: ranceProtocol[dappEnv],
+                    userAddress: plenaWalletAddress,
+                    planId,
+                    amount,
+                    path,
+                    insureCoin,
+                    paymentToken,
+                    referrer,
+                    sendTransactionWithPlena,
+                    callbacks,
+                });
+            } else {
+                await insureWithEIP1193UseCase({
+                    contract: insuranceContract,
+                    planId,
+                    amount,
+                    path,
+                    insureCoin,
+                    paymentToken,
+                    referrer,
+                    send,
+                    callbacks,
+                });
+            }
         },
-        [insuranceContract, send]
+        [insuranceContract, plenaWalletAddress, send, sendTransactionWithPlena]
     );
 
     interface ICancelParams {
         packageId: string;
+        insureCoinAddress: string;
+        insuredAmount: BigNumber;
+        ranceTokenAddress: string;
+        unsureFee: BigNumber;
         callbacks: { [key: string]: (errorMessage?: string) => void };
     }
 
     const cancelInsurance = useCallback(
-        async ({ packageId, callbacks }: ICancelParams): Promise<void> => {
-            await cancelInsuranceUseCase({
-                contract: insuranceContract,
-                packageId,
-                send,
-                callbacks,
-            });
+        async ({
+            packageId,
+            callbacks,
+            insureCoinAddress,
+            insuredAmount,
+            ranceTokenAddress,
+            unsureFee,
+        }: ICancelParams): Promise<void> => {
+            if (plenaWalletAddress) {
+                await cancelInsuranceWithPlenaUseCase({
+                    contractAddress: ranceProtocol[dappEnv],
+                    userAddress: plenaWalletAddress,
+                    sendTransactionWithPlena,
+                    packageId,
+                    insureCoinAddress,
+                    insuredAmount,
+                    ranceTokenAddress,
+                    unsureFee,
+                    callbacks,
+                });
+            } else {
+                await cancelInsuranceUseCase({
+                    contract: insuranceContract,
+                    packageId,
+                    send,
+                    callbacks,
+                });
+            }
         },
-        [insuranceContract, send]
+        [insuranceContract, plenaWalletAddress, send, sendTransactionWithPlena]
     );
 
     interface IWithdrawParams {
@@ -117,14 +175,24 @@ export const useInsuranceViewModel = (props: IProps) => {
 
     const withdrawInsurance = useCallback(
         async ({ packageId, callbacks }: IWithdrawParams): Promise<void> => {
-            await withdrawInsuranceUseCase({
-                contract: insuranceContract,
-                packageId,
-                send,
-                callbacks,
-            });
+            if (plenaWalletAddress) {
+                await withdrawInsuranceWithPlenaUseCase({
+                    contractAddress: ranceProtocol[dappEnv],
+                    userAddress: plenaWalletAddress,
+                    sendTransactionWithPlena,
+                    packageId,
+                    callbacks,
+                });
+            } else {
+                await withdrawInsuranceUseCase({
+                    contract: insuranceContract,
+                    packageId,
+                    send,
+                    callbacks,
+                });
+            }
         },
-        [insuranceContract, send]
+        [insuranceContract, plenaWalletAddress, send, sendTransactionWithPlena]
     );
 
     useEffect(() => {
