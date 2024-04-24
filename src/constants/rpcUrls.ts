@@ -5,7 +5,7 @@ export const RPC_URLS = {
 
 export const RPC_LIST_MAP = {
     137: [
-        // `https://polygon-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_KEY}`,
+        `https://polygon-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_KEY}`,
         `https://polygon-mainnet.chainnodes.org/${process.env.NEXT_PUBLIC_CHAINNODES_KEY}`,
         "https://polygon-rpc.com",
         "https://rpc.ankr.com/polygon",
