@@ -64,14 +64,14 @@ export const getLibrary = (provider: any): Web3Provider => {
     return library;
 };
 
-export const getDefaultProvider = () => {
-    return new ethers.providers.JsonRpcProvider(
-        process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT === "mainnet" ||
-        process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT === "staging"
-            ? RPC_URLS[137]
-            : RPC_URLS[80001]
-    );
-};
+// export const getDefaultProvider = () => {
+//     return new ethers.providers.JsonRpcProvider(
+//         process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT === "mainnet" ||
+//         process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT === "staging"
+//             ? RPC_URLS[137]
+//             : RPC_URLS[80001]
+//     );
+// };
 
 export const getConnectionError = (err: any): string => {
     if (err instanceof NoEthereumProviderError)

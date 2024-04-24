@@ -4,15 +4,17 @@ import { useDispatch } from "react-redux";
 import { stakingContractAddresses } from "../../../constants/addresses";
 import useTransaction from "../../../hooks/useTransaction";
 import { Staking1__factory, Staking2__factory } from "../../../typechain";
-import { getDefaultProvider } from "../../../wallet/utils";
-import { initializeStakingPools as initializeStakingPoolsAction } from "../infrastructure/redux/actions";
-import { updateStakingPool as updateStakingPoolAction } from "../infrastructure/redux/actions";
+import {
+    initializeStakingPools as initializeStakingPoolsAction,
+    updateStakingPools as updateStakingPoolsAction,
+} from "../infrastructure/redux/actions";
 import { compound as compoundUsecase } from "../usecases/compound";
 import { stake as stakeUsecase } from "../usecases/stake";
 import { unstake as unstakeUsecase } from "../usecases/unstake";
 import { harvest as harvestUsecase } from "../usecases/harvest";
 import { BigNumber } from "ethers";
 import { watchEvent } from "../../../utils/events";
+import { resilientJsonRpcProvider } from "../../../constants/provider";
 
 interface IProps {
     address: string | null | undefined;
@@ -30,23 +32,23 @@ export const useStakingViewModel = (props: IProps) => {
 
     const stakingContract1 = Staking1__factory.connect(
         stakingContractAddresses[dappEnv][0],
-        provider?.getSigner() || getDefaultProvider()
+        provider?.getSigner() || resilientJsonRpcProvider
     );
 
     const stakingContract2 = Staking2__factory.connect(
         stakingContractAddresses[dappEnv][1],
-        provider?.getSigner() || getDefaultProvider()
+        provider?.getSigner() || resilientJsonRpcProvider
     );
 
     const initializeStakingPools = useCallback(async () => {
         const stakingContract1 = Staking1__factory.connect(
             stakingContractAddresses[dappEnv][0],
-            provider?.getSigner() || getDefaultProvider()
+            provider?.getSigner() || resilientJsonRpcProvider
         );
 
         const stakingContract2 = Staking2__factory.connect(
             stakingContractAddresses[dappEnv][1],
-            provider?.getSigner() || getDefaultProvider()
+            provider?.getSigner() || resilientJsonRpcProvider
         );
         initializeStakingPoolsAction(
             stakingContract1,
@@ -117,17 +119,17 @@ export const useStakingViewModel = (props: IProps) => {
         watchEvent(stakingContract1, "Deposit", [null, 0, null], async () => {
             const contract = Staking1__factory.connect(
                 stakingContractAddresses[dappEnv][0],
-                provider?.getSigner() || getDefaultProvider()
+                provider?.getSigner() || resilientJsonRpcProvider
             );
-            updateStakingPoolAction(contract, 0, address)(dispatch);
+            updateStakingPoolsAction(contract, 0, address)(dispatch);
         });
 
         watchEvent(stakingContract1, "Withdraw", [null, 0, null], async () => {
             const contract = Staking1__factory.connect(
                 stakingContractAddresses[dappEnv][0],
-                provider?.getSigner() || getDefaultProvider()
+                provider?.getSigner() || resilientJsonRpcProvider
             );
-            updateStakingPoolAction(contract, 0, address)(dispatch);
+            updateStakingPoolsAction(contract, 0, address)(dispatch);
         });
 
         return () => {
@@ -139,17 +141,17 @@ export const useStakingViewModel = (props: IProps) => {
         watchEvent(stakingContract2, "Deposit", [null, 1, null], async () => {
             const contract = Staking2__factory.connect(
                 stakingContractAddresses[dappEnv][1],
-                provider?.getSigner() || getDefaultProvider()
+                provider?.getSigner() || resilientJsonRpcProvider
             );
-            updateStakingPoolAction(contract, 1, address)(dispatch);
+            updateStakingPoolsAction(contract, 1, address)(dispatch);
         });
 
         watchEvent(stakingContract2, "Withdraw", [null, 1, null], async () => {
             const contract = Staking2__factory.connect(
                 stakingContractAddresses[dappEnv][1],
-                provider?.getSigner() || getDefaultProvider()
+                provider?.getSigner() || resilientJsonRpcProvider
             );
-            updateStakingPoolAction(contract, 1, address)(dispatch);
+            updateStakingPoolsAction(contract, 1, address)(dispatch);
         });
 
         return () => {

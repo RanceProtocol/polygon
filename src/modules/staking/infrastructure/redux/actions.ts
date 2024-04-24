@@ -45,7 +45,7 @@ export const initializeStakingPools =
         }
     };
 
-export const updateStakingPool =
+export const updateStakingPools =
     (
         contract: Staking1 | Staking2,
         pId: number,

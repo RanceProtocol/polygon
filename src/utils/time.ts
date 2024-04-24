@@ -1,10 +1,8 @@
-import { getDefaultProvider } from "../wallet/utils";
+import { resilientJsonRpcProvider } from "../constants/provider";
 
 export const getCurrentTimestamp = async (): Promise<number | undefined> => {
     try {
-        const provider = getDefaultProvider();
-        const blockNumber = await provider.getBlockNumber();
-        const { timestamp } = await provider.getBlock(blockNumber);
+        const { timestamp } = await resilientJsonRpcProvider.getBlock("latest");
         return timestamp;
     } catch (error) {
         console.error(error);
