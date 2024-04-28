@@ -18,10 +18,12 @@ export const tokens = {
     mainnet: {
         RANCE: "0x885C73a4F42F321a76F556CC99514A9BBd8e29bD",
         USDC: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+        USDT: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
     },
     staging: {
         RANCE: "0xa92CF4945dC605e29a72A965Ef55f2D342c70f8A",
         USDC: "0x627556f80539153717609A7Eac309c3C54c5480D",
+        USDT: "",
     },
 };
 
