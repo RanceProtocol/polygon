@@ -67,7 +67,7 @@ export const insureWithPlena = async (
 
     const paymentTokenAdress =
         tokens[process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT as keyof typeof tokens][
-            paymentToken as "USDC" | "RANCE"
+            paymentToken as "USDT" | "USDC" | "RANCE"
         ];
 
     const approveTxData = ERC20Interface.encodeFunctionData("approve", [
